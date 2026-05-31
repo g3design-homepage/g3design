@@ -1,0 +1,39 @@
+# Security - NEVER commit
+.env
+.env.*
+*.pem
+*.key
+.claude/
+.wrangler/
+GA4_SETUP_GUIDE.html
+.omx/
+tools/*backup*.json
+
+# Dependencies
+node_modules/
+.next/
+out/
+
+# Build
+*.log
+*.tsbuildinfo
+
+# Large assets (portfolio images 485MB)
+migration/images/portfolio/
+
+# Temp files
+/tmp/
+wireframe/generated/frames/
+*.temp.mp4
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+.vercel
+
+.vercel
