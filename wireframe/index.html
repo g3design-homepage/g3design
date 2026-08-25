@@ -28,6 +28,16 @@
     <meta name="twitter:title" content="G3 DESIGN | 상업공간 인테리어 전문 · 카페·음식점·사무실" />
     <meta name="twitter:description" content="인천 청라 G3디자인, 카페·음식점·미용실·사무실 등 상업공간 인테리어 전문. 시공 500건 이상, 무료 상담 및 3D 디자인 제안." />
     <meta name="twitter:image" content="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/og-image.jpg" />
+    <!-- 자산 서버와의 연결을 미리 열어 첫 이미지·폰트 도착을 앞당긴다 -->
+    <link rel="preconnect" href="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <!-- 히어로 포스터는 첫 화면을 채우는 이미지라 가장 먼저 받는다 -->
+    <link
+      rel="preload"
+      as="image"
+      href="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/video/hero-poster.jpg"
+      fetchpriority="high"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
@@ -518,27 +528,17 @@
     <!-- HERO -->
     <section class="relative h-screen min-h-[600px] overflow-hidden">
       <div class="absolute inset-0 bg-[#1C1917]">
-        <!-- Loading screen (same style as portfolio) -->
-        <div id="heroLoader" class="fixed inset-0 z-[9999] flex items-center justify-center" style="background:#1C1917">
-          <div class="text-center" style="width:280px">
-            <div style="color:#fff;font-size:24px;font-weight:700;letter-spacing:4px">
-              <span style="color:#b94a2c">G3</span> DESIGN
-            </div>
-            <div style="width:100%;height:2px;background:#333;margin-top:28px;border-radius:1px;overflow:hidden">
-              <div id="heroLoadBar" style="height:100%;width:0;background:#a17d4a;border-radius:1px;transition:width 0.3s ease"></div>
-            </div>
-            <div style="color:#999;font-size:12px;margin-top:16px;letter-spacing:1px">
-              영상을 불러오는 중<span class="hero-ld-dots"><span>.</span><span>.</span><span>.</span></span>
-            </div>
-          </div>
-        </div>
+        <!-- 포스터가 먼저 깔리므로 첫 화면은 즉시 그려지고, 영상은 화면 크기에 맞는
+             파일만 페이지 로드 뒤에 따로 받는다 (hero-video.js) -->
         <video
           id="heroVideo"
           autoplay muted loop playsinline
-          class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700"
-        >
-          <source src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/video/cafe_timelapse_clean.mp4" type="video/mp4">
-        </video>
+          preload="none"
+          poster="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/video/hero-poster.jpg"
+          data-src-desktop="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/video/hero-desktop.mp4"
+          data-src-mobile="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/video/hero-mobile.mp4"
+          class="absolute inset-0 w-full h-full object-cover"
+        ></video>
         <div class="absolute inset-0 bg-black/45"></div>
         <span class="absolute bottom-4 right-4 text-[10px] text-white/40 z-10">AI 컨셉영상입니다</span>
       </div>
@@ -689,10 +689,10 @@
           >
             <div class="overflow-hidden aspect-[16/9]">
               <img
-                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide3.jpg"
+                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide3.webp"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 alt="카페"
-              />
+              / loading="lazy" decoding="async">
             </div>
             <div class="p-4 md:p-5">
               <h3 class="font-bold text-base md:text-lg">카페 진행사례</h3>
@@ -710,10 +710,10 @@
           >
             <div class="overflow-hidden aspect-[16/9]">
               <img
-                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide5.jpg"
+                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide5.webp"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 alt="미용실"
-              />
+              / loading="lazy" decoding="async">
             </div>
             <div class="p-4 md:p-5">
               <h3 class="font-bold text-base md:text-lg">미용실 진행사례</h3>
@@ -731,10 +731,10 @@
           >
             <div class="overflow-hidden aspect-[16/9]">
               <img
-                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide1.jpg"
+                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide1.webp"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 alt="식당"
-              />
+              / loading="lazy" decoding="async">
             </div>
             <div class="p-4 md:p-5">
               <h3 class="font-bold text-base md:text-lg">식당 진행사례</h3>
@@ -752,10 +752,10 @@
           >
             <div class="overflow-hidden aspect-[16/9]">
               <img
-                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide1.jpg"
+                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide1.webp"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 alt="사무실"
-              />
+              / loading="lazy" decoding="async">
             </div>
             <div class="p-4 md:p-5">
               <h3 class="font-bold text-base md:text-lg">사무실 진행사례</h3>
@@ -773,10 +773,10 @@
           >
             <div class="overflow-hidden aspect-[16/9]">
               <img
-                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide2.jpg"
+                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide2.webp"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 alt="학원"
-              />
+              / loading="lazy" decoding="async">
             </div>
             <div class="p-4 md:p-5">
               <h3 class="font-bold text-base md:text-lg">학원 진행사례</h3>
@@ -794,10 +794,10 @@
           >
             <div class="overflow-hidden aspect-[16/9]">
               <img
-                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide4.jpg"
+                src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/slider/slide4.webp"
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 alt="매장"
-              />
+              / loading="lazy" decoding="async">
             </div>
             <div class="p-4 md:p-5">
               <h3 class="font-bold text-base md:text-lg">매장 진행사례</h3>
@@ -1336,10 +1336,10 @@
             class="rounded-xl overflow-hidden aspect-[4/3] border border-border bg-bg-muted relative"
           >
             <img
-              src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/about-office.jpg"
+              src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/about-office.webp"
               class="w-full h-full object-cover"
               alt="G3 디자인 사무실"
-            />
+            / loading="lazy" decoding="async">
             <span
               class="absolute bottom-2 right-3 text-[10px] text-text-muted/50"
               >AI 생성이미지</span
@@ -1797,29 +1797,31 @@
       <div class="lb-counter" id="lbCounter"></div>
     </div>
   <script>
-    // Hero video loader with progress bar
+    // 히어로 영상 지연 로드
+    // poster 가 첫 화면을 즉시 채우므로, 영상은 페이지의 나머지 자원을 다 받은 뒤에
+    // 시작한다. 화면 크기에 맞는 파일 하나만 받아 모바일 데이터를 아낀다.
+    // 데이터 절약 모드이거나 느린 회선이면 영상을 아예 받지 않고 poster 로 둔다.
     (function(){
       var v = document.getElementById('heroVideo');
-      var loader = document.getElementById('heroLoader');
-      var bar = document.getElementById('heroLoadBar');
       if (!v) return;
 
-      // Simulate progress while buffering
-      var progress = 0;
-      var interval = setInterval(function(){
-        if (progress < 85) { progress += Math.random() * 8 + 2; if (bar) bar.style.width = Math.min(progress, 85) + '%'; }
-      }, 200);
+      var conn = navigator.connection || {};
+      if (conn.saveData || /^(slow-)?2g$/.test(conn.effectiveType || '')) return;
 
-      function show() {
-        clearInterval(interval);
-        if (bar) bar.style.width = '100%';
-        setTimeout(function(){
-          v.style.opacity = '1';
-          if (loader) { loader.style.transition = 'opacity 0.5s'; loader.style.opacity = '0'; setTimeout(function(){ loader.remove(); }, 500); }
-        }, 300);
+      var small = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches;
+      var src = small ? v.dataset.srcMobile : v.dataset.srcDesktop;
+      if (!src) return;
+
+      function start() {
+        if (v.getAttribute('src')) return;
+        v.setAttribute('src', src);
+        v.load();
+        var p = v.play();
+        if (p && p.catch) p.catch(function(){}); // 자동재생이 막혀도 poster 가 남는다
       }
-      if (v.readyState >= 3) { show(); return; }
-      v.addEventListener('canplay', show, { once: true });
+
+      if (document.readyState === 'complete') start();
+      else window.addEventListener('load', start, { once: true });
     })();
   </script>
   <script src="/track.js"></script>
