@@ -883,16 +883,39 @@
       let lbImages = [];
       let lbIndex = 0;
 
+      // 오버레이 히스토리 (뒤로가기로 모달/라이트박스만 닫기)
+      // 레이어를 열 때 history 엔트리를 1개 push 하고, 닫기 액션은 history.back() 만
+      // 호출한다. 실제 DOM 닫기는 popstate 에서만 수행하므로, 뒤로가기가 페이지 이탈
+      // 대신 오버레이 닫기로 소비된다. pushState 세 번째 인자를 생략해 URL 은 그대로
+      // 유지되고 색인에도 영향이 없다.
+      let modalOpen = false;
+      let lightboxOpen = false;
+
       function openLb(index) {
         lbIndex = index;
         document.getElementById("lbImg").src = lbImages[lbIndex];
         document.getElementById("lbCounter").textContent =
           lbIndex + 1 + " / " + lbImages.length;
         document.getElementById("lightbox").classList.add("open");
+        if (!lightboxOpen) {
+          lightboxOpen = true;
+          history.pushState({ g3Overlay: "lightbox" }, "");
+        }
       }
 
-      function closeLb() {
+      // DOM 만 닫는다 (popstate 전용 — history 는 건드리지 않는다)
+      function closeLbOnly() {
         document.getElementById("lightbox").classList.remove("open");
+        lightboxOpen = false;
+      }
+
+      // 닫기 요청 (버튼/배경/ESC) → 히스토리 엔트리가 있으면 뒤로가기로 위임한다
+      function closeLb() {
+        if (lightboxOpen) {
+          history.back();
+          return;
+        }
+        closeLbOnly();
       }
 
       function lbNav(dir) {
@@ -930,12 +953,36 @@
 
         document.getElementById("detailModal").classList.add("open");
         document.body.style.overflow = "hidden";
+        if (modalOpen) {
+          // 이미 열린 상태에서 다른 프로젝트로 교체하는 경우: 엔트리를 새로 쌓지 않는다
+          history.replaceState({ g3Overlay: "modal" }, "");
+          return;
+        }
+        modalOpen = true;
+        history.pushState({ g3Overlay: "modal" }, "");
       }
 
-      function closeDetail() {
+      // DOM 만 닫는다 (popstate 전용)
+      function closeDetailOnly() {
         document.getElementById("detailModal").classList.remove("open");
         document.body.style.overflow = "";
+        modalOpen = false;
       }
+
+      // 닫기 요청 (버튼/배경/ESC) → 히스토리 엔트리가 있으면 뒤로가기로 위임한다
+      function closeDetail() {
+        if (modalOpen) {
+          history.back();
+          return;
+        }
+        closeDetailOnly();
+      }
+
+      // 뒤로가기 → 열려 있는 오버레이 중 최상단(라이트박스 > 모달) 하나만 닫는다
+      window.addEventListener("popstate", () => {
+        if (lightboxOpen) closeLbOnly();
+        else if (modalOpen) closeDetailOnly();
+      });
 
       function renderAll() {
         grid.innerHTML = "";
