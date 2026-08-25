@@ -106,13 +106,16 @@ module.exports = async (req, res) => {
   if (req.method === "GET") {
     const adminMode = verifyAdminToken(req);
     try {
-      // 관리자 화면은 항상 최신을 봐야 하므로 캐시하지 않는다. 공개 목록은 엣지에서
-      // 5분간 재사용하고, 그 뒤 하루 동안은 낡은 응답을 먼저 돌려주면서 뒤에서 갱신한다.
+      // 관리자 화면은 항상 최신을 봐야 하므로 캐시하지 않는다.
+      // 공개 목록은 엣지에서 1분간 재사용한다. 관리자가 새 시공사례를 올리고 바로
+      // 홈페이지에서 확인하는 흐름이라 이보다 길면 "안 올라갔나" 싶은 공백이 생긴다.
+      // 1분이어도 그동안 들어온 요청은 전부 한 응답을 나눠 쓰므로 D1 조회는 분당 1회다.
+      // 그 뒤 5분간은 낡은 응답을 먼저 주면서 뒤에서 갱신한다.
       res.setHeader(
         "Cache-Control",
         adminMode
           ? "private, no-store"
-          : "public, s-maxage=300, stale-while-revalidate=86400",
+          : "public, s-maxage=60, stale-while-revalidate=300",
       );
 
       const { id, page, limit } = req.query || {};
