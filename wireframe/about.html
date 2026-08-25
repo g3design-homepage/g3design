@@ -1,0 +1,1214 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-M6FWVH299Y"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-M6FWVH299Y");
+    </script>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회사소개 | G3 DESIGN - 인천 상업공간 인테리어 전문업체</title>
+    <meta
+      name="description"
+      content="G3디자인은 인천 청라에 위치한 상업공간 인테리어 전문 업체입니다. 20년 경력의 전문가가 카페, 음식점, 사무실 등 상가인테리어를 책임집니다."
+    />
+    <meta
+      name="keywords"
+      content="상업공간인테리어, 상가인테리어, 카페인테리어, 음식점인테리어, 사무실인테리어, 미용실인테리어, 학원인테리어, 인천인테리어, 청라인테리어, G3디자인"
+    />
+    <link rel="canonical" href="https://g3design.kr/about" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="회사소개 | G3 DESIGN - 인천 상업공간 인테리어 전문업체"
+    />
+    <meta
+      property="og:description"
+      content="G3디자인은 인천 청라에 위치한 상업공간 인테리어 전문 업체입니다. 20년 경력의 전문가가 카페, 음식점, 사무실 등 상가인테리어를 책임집니다."
+    />
+    <meta property="og:url" content="https://g3design.kr/about" />
+    <meta
+      property="og:image"
+      content="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/og-image.jpg"
+    />
+    <meta property="og:site_name" content="G3 DESIGN" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="회사소개 | G3 DESIGN - 인천 상업공간 인테리어 전문업체"
+    />
+    <meta
+      name="twitter:description"
+      content="G3디자인은 인천 청라에 위치한 상업공간 인테리어 전문 업체입니다. 20년 경력의 전문가가 카페, 음식점, 사무실 등 상가인테리어를 책임집니다."
+    />
+    <meta
+      name="twitter:image"
+      content="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/og-image.jpg"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: "#FFFFFF",
+              "bg-warm": "#FAFAF8",
+              "bg-muted": "#F0EFED",
+              text: "#1A1A1A",
+              "text-sub": "#555555",
+              "text-muted": "#999999",
+              accent: "#A17D4A",
+              "accent-hover": "#8B6A3C",
+              "accent-light": "#F5F0E8",
+              "g3-red": "#B94A2C",
+              border: "#E8E8E6",
+              dark: "#1C1917",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        font-family: "Pretendard Variable", "Pretendard", system-ui, sans-serif;
+      }
+      body {
+        animation: pageIn 0.5s ease-out;
+      }
+      @keyframes pageIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        opacity: 0;
+      }
+      .fade-up.visible {
+        animation: fadeUp 0.7s ease forwards;
+      }
+      .stagger-1 {
+        animation-delay: 0.1s;
+      }
+      .stagger-2 {
+        animation-delay: 0.2s;
+      }
+      .stagger-3 {
+        animation-delay: 0.3s;
+      }
+      .stagger-4 {
+        animation-delay: 0.4s;
+      }
+      .region-highlight {
+        transition: all 0.3s;
+      }
+      .region-highlight.active {
+        box-shadow: 0 0 0 3px #b94a2c;
+        transform: scale(1.02);
+      }
+      .region-active {
+        fill: #b94a2c;
+        opacity: 0.85;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .region-active:hover {
+        opacity: 1;
+        transform: scale(1.02);
+        transform-origin: center;
+      }
+      .region-inactive {
+        fill: #d4d4d4;
+        opacity: 0.4;
+      }
+      .region-label {
+        font-size: 11px;
+        fill: #fff;
+        font-weight: 700;
+        pointer-events: none;
+      }
+      .region-label-dark {
+        font-size: 10px;
+        fill: #888;
+        font-weight: 500;
+        pointer-events: none;
+      }
+      .tooltip {
+        position: absolute;
+        background: #1a1a1a;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s;
+        white-space: nowrap;
+        z-index: 10;
+      }
+      .tooltip::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 5px solid transparent;
+        border-top-color: #1a1a1a;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        opacity: 0;
+      }
+      .fade-up.visible {
+        animation: fadeUp 0.7s ease forwards;
+      }
+      .stagger-1 {
+        animation-delay: 0.1s;
+      }
+      .stagger-2 {
+        animation-delay: 0.2s;
+      }
+      .stagger-3 {
+        animation-delay: 0.3s;
+      }
+      .stagger-4 {
+        animation-delay: 0.4s;
+      }
+    </style>
+  </head>
+  <body class="bg-bg text-text">
+    <!-- HEADER -->
+    <header
+      class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border"
+    >
+      <div
+        class="max-w-7xl mx-auto px-5 md:px-8 h-[72px] flex items-center justify-between"
+      >
+        <a href="/" class="text-[22px] font-extrabold tracking-tight"
+          ><span class="text-g3-red">G3</span> DESIGN</a
+        >
+        <nav class="hidden md:flex items-center gap-7">
+          <a
+            href="/portfolio"
+            class="text-[15px] text-text-sub hover:text-text transition"
+            >포트폴리오</a
+          >
+          <a href="/about" class="text-[15px] text-accent font-semibold"
+            >회사소개</a
+          >
+          <a
+            href="/contact"
+            class="text-[15px] text-text-sub hover:text-text transition"
+            >상담 신청</a
+          >
+          <span class="text-text-muted text-sm">032-543-6890</span>
+          <a
+            href="/contact"
+            class="bg-accent hover:bg-accent-hover text-white px-5 py-2.5 text-sm font-semibold rounded-md transition"
+            >무료 상담</a
+          >
+        </nav>
+        <button
+          class="md:hidden"
+          onclick="document.getElementById('mob').classList.toggle('hidden')"
+        >
+          <svg
+            width="26"
+            height="26"
+            fill="none"
+            stroke="#1A1A1A"
+            stroke-width="2"
+          >
+            <path d="M4 7h18M4 13h18M4 19h18" />
+          </svg>
+        </button>
+      </div>
+    </header>
+    <div
+      id="mob"
+      class="hidden fixed inset-0 z-[60] bg-white flex flex-col items-center justify-center gap-6"
+    >
+      <button
+        class="absolute top-5 right-5"
+        onclick="this.parentElement.classList.add('hidden')"
+      >
+        <svg
+          width="26"
+          height="26"
+          fill="none"
+          stroke="#1A1A1A"
+          stroke-width="2"
+        >
+          <path d="M6 6l14 14M20 6L6 20" />
+        </svg>
+      </button>
+      <a href="/portfolio" class="text-xl font-semibold">포트폴리오</a>
+      <a href="/about" class="text-xl font-semibold text-accent">회사소개</a>
+      <a href="/contact" class="text-xl font-semibold">상담 신청</a>
+    </div>
+
+    <!-- HERO BANNER -->
+    <section class="relative h-[50vh] min-h-[320px] overflow-hidden">
+      <img
+        src="generated/hero_main.png"
+        class="absolute inset-0 w-full h-full object-cover scale-105"
+        alt=""
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70"
+      ></div>
+      <span class="absolute bottom-3 right-4 text-[10px] text-white/40 z-10"
+        >AI 생성이미지입니다</span
+      >
+      <!-- Decorative geometric shapes -->
+      <div
+        class="absolute top-16 right-16 w-28 h-28 border border-white/10 rounded-full hidden md:block"
+      ></div>
+      <div
+        class="absolute bottom-20 left-12 w-20 h-20 border border-white/10 rotate-45 hidden md:block"
+      ></div>
+      <div
+        class="absolute top-24 left-1/4 w-3 h-3 bg-accent/40 rounded-full hidden md:block"
+      ></div>
+      <div
+        class="relative z-10 h-full flex flex-col items-center justify-end text-center px-6 pb-16"
+      >
+        <p class="text-white/50 text-xs tracking-[0.25em] uppercase mb-3">
+          About G3 Design
+        </p>
+        <h1 class="text-3xl md:text-5xl font-bold text-white mb-2">회사소개</h1>
+        <p class="text-white/60 text-sm md:text-base">
+          상업공간, 15년의 시공 노하우
+        </p>
+      </div>
+    </section>
+
+    <!-- INTRO - 대표인사 -->
+    <section class="py-24 md:py-32">
+      <div
+        class="max-w-6xl mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-16 items-center"
+      >
+        <!-- Photo -->
+        <div class="relative">
+          <div
+            class="rounded-2xl overflow-hidden aspect-[3/4] shadow-2xl relative"
+          >
+            <img
+              src="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/ceo-interior.jpg"
+              class="w-full h-full object-cover"
+              alt="감각적인 인테리어 디자인"
+            />
+            <span class="absolute bottom-2 right-3 text-[10px] text-white/40"
+              >AI 생성이미지</span
+            >
+          </div>
+          <!-- Decorative accent block -->
+          <div
+            class="absolute -bottom-4 -right-4 w-24 h-24 bg-accent/10 rounded-xl -z-10"
+          ></div>
+          <div
+            class="absolute -top-4 -left-4 w-16 h-16 border-2 border-accent/20 rounded-xl -z-10"
+          ></div>
+        </div>
+        <!-- Text -->
+        <div>
+          <div
+            class="inline-block bg-accent-light text-accent text-xs font-bold px-3 py-1.5 rounded-full mb-6 tracking-wider"
+          >
+            CEO MESSAGE
+          </div>
+          <h2 class="text-2xl md:text-[32px] font-bold leading-snug mb-8">
+            21세기 친환경 인테리어를 선도하는<br />
+            <span class="text-g3-red">G3 디자인</span>입니다
+          </h2>
+          <div class="space-y-4 text-text-sub text-[15px] leading-[1.8]">
+            <p class="font-semibold text-text text-base">
+              성공적인 Remodeling을 위한
+              <span class="text-accent">완벽한 네트워크</span>
+            </p>
+            <p>
+              Remodeling이란 소비자의 욕구와 시대의 흐름에 부응하기 위하여
+              <span class="text-accent font-medium">건축의 가치를 극대화</span
+              >하는 것으로 제3의 건축이라고도 부릅니다. G3디자인은 "<span
+                class="text-accent font-medium"
+                >건축의 새물결</span
+              >(The New Waves of Construction)"을 모토로 단순히 변형된 건축물이
+              아닌 건축물의 모든 요소에
+              <span class="text-accent font-medium">인간이 중심</span>이 되는
+              새로운 가치, 최상의 가치를 부여하여 건축물과 환경이 하나가 되는
+              새로운 양식을 추구합니다.
+            </p>
+            <p class="font-semibold text-text text-base">
+              고객의 뜻에 고객의 만족에 이어지는
+              <span class="text-accent">고객의 감동</span>
+            </p>
+            <p>
+              최선을 다할 때만이 그 기업의 운명은 한결같다는 사실을 잘 알고
+              있습니다. 고객을 위한
+              <span class="text-accent font-medium">투철한 기업정신</span>으로
+              더욱 승화시켜 나갈 것입니다.
+            </p>
+            <p>
+              내 집 마련은 모든 가정의 일생의 숙원이자 꿈입니다. 우리들은 그
+              꿈을 실현하기 위해 부단한 노력을 하여 살아가고 있습니다. 그러나 내
+              집을 구조적으로 안전하며, 기능적으로 관리하고 아름답게 유지하여
+              <span class="text-accent font-medium"
+                >재산목록 1호로서의 가치</span
+              >를 부여하기 위해서는 그 주택의 수명이 다하기까지 건축 비용보다
+              많은 비용이 건축물의 유지보수에 들어가고 있다는 사실을 간과하고
+              있는 것이 현실입니다.
+            </p>
+            <p>
+              정확한 규격품에 일관된
+              <span class="text-accent font-medium">철저한 품질시스템</span>으로
+              고객 여러분을 가까이서 모실 것을 약속드리며 고객 여러분의 따뜻한
+              격려와 사랑을 기대합니다.
+            </p>
+          </div>
+          <div class="mt-8 pt-6 border-t border-border">
+            <p class="text-lg font-bold">
+              김용석
+              <span class="text-text-muted font-normal text-sm ml-2"
+                >G3 DESIGN 대표</span
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS - 실적 -->
+    <section id="statsSection" class="py-20 bg-[#F5F0E8]">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 text-center">
+          <div class="fade-up stagger-1">
+            <div class="text-4xl md:text-5xl font-extrabold text-accent mb-2">
+              <span data-count="196">0</span><span class="text-2xl">+</span>
+            </div>
+            <div class="text-text-muted text-sm">완공 프로젝트</div>
+          </div>
+          <div class="fade-up stagger-2">
+            <div class="text-4xl md:text-5xl font-extrabold text-text mb-2">
+              <span data-count="15">0</span><span class="text-2xl">년</span>
+            </div>
+            <div class="text-text-muted text-sm">시공 경험</div>
+          </div>
+          <div class="fade-up stagger-3">
+            <div class="text-4xl md:text-5xl font-extrabold text-text mb-2">
+              <span data-count="2300">0</span><span class="text-2xl">+</span>
+            </div>
+            <div class="text-text-muted text-sm">포트폴리오 사진</div>
+          </div>
+          <div class="fade-up stagger-4">
+            <div class="text-4xl md:text-5xl font-extrabold text-text mb-2">
+              <span data-count="8">0</span><span class="text-2xl">개</span>
+            </div>
+            <div class="text-text-muted text-sm">전문 분야</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALUES - 핵심가치 (영상 + 카드 3단) -->
+    <section class="py-24 md:py-28">
+      <div class="max-w-6xl mx-auto px-5 md:px-8">
+        <div class="text-center mb-16">
+          <div
+            class="inline-block bg-accent-light text-accent text-xs font-bold px-3 py-1.5 rounded-full mb-4 tracking-wider"
+          >
+            CORE VALUES
+          </div>
+          <h2 class="text-2xl md:text-[32px] font-bold">핵심 가치</h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <!-- LEFT: 오피스 타임랩스 영상 -->
+          <div
+            class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-black"
+          >
+            <video
+              autoplay
+              muted
+              loop
+              playsinline
+              class="w-full h-full object-cover"
+            >
+              <source
+                src="generated/office_timelapse_clean.mp4"
+                type="video/mp4"
+              />
+            </video>
+            <span
+              class="absolute bottom-2 right-3 text-[10px] text-white/40 z-10"
+              >AI 생성영상입니다</span
+            >
+          </div>
+
+          <!-- RIGHT: 카드 3단 세로 -->
+          <div class="space-y-4">
+            <!-- Card 1 -->
+            <div
+              class="group relative bg-white border border-border rounded-2xl p-6 hover:border-accent/30 hover:shadow-xl transition-all duration-300 overflow-hidden"
+            >
+              <div
+                class="absolute top-0 left-0 w-full h-1 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+              ></div>
+              <div class="flex items-start gap-4">
+                <div
+                  class="w-12 h-12 rounded-xl bg-accent-light flex items-center justify-center shrink-0"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="#B94A2C"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  >
+                    <path
+                      d="M12 3v5M9 6l3-3 3 3M5 12c0-3.9 3.1-7 7-7s7 3.1 7 7"
+                    />
+                    <path
+                      d="M3 19c0-1.7.9-3.4 2.6-4.3M21 19c0-1.7-.9-3.4-2.6-4.3"
+                    />
+                    <circle cx="12" cy="14" r="2.5" />
+                    <path d="M12 16.5v4" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-[16px] mb-1.5">친환경 인테리어</h3>
+                  <p class="text-sm text-text-sub leading-relaxed">
+                    지속 가능한 자재와 공법으로 건강한 공간을 만듭니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Card 2 -->
+            <div
+              class="group relative bg-white border border-border rounded-2xl p-6 hover:border-accent/30 hover:shadow-xl transition-all duration-300 overflow-hidden"
+            >
+              <div
+                class="absolute top-0 left-0 w-full h-1 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+              ></div>
+              <div class="flex items-start gap-4">
+                <div
+                  class="w-12 h-12 rounded-xl bg-accent-light flex items-center justify-center shrink-0"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="#B94A2C"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  >
+                    <circle cx="12" cy="8" r="4.5" />
+                    <path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7" />
+                    <path d="M9 8h6M12 4.5v7" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-[16px] mb-1.5">인간 중심 설계</h3>
+                  <p class="text-sm text-text-sub leading-relaxed">
+                    동선, 편의성, 감성을 최우선으로 고려하여 최적의 공간을
+                    설계합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Card 3 -->
+            <div
+              class="group relative bg-white border border-border rounded-2xl p-6 hover:border-accent/30 hover:shadow-xl transition-all duration-300 overflow-hidden"
+            >
+              <div
+                class="absolute top-0 left-0 w-full h-1 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+              ></div>
+              <div class="flex items-start gap-4">
+                <div
+                  class="w-12 h-12 rounded-xl bg-accent-light flex items-center justify-center shrink-0"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    fill="none"
+                    stroke="#B94A2C"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  >
+                    <rect x="3" y="9" width="18" height="10" rx="2" />
+                    <path d="M7 9V6a5 5 0 0110 0v3M12 14v2.5" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-[16px] mb-1.5">
+                    건축과 환경의 조화
+                  </h3>
+                  <p class="text-sm text-text-sub leading-relaxed">
+                    건축물과 환경이 하나가 되는 새로운 양식을 추구합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY TIMELINE -->
+    <section class="py-24 md:py-28">
+      <div class="max-w-3xl mx-auto px-5 md:px-8">
+        <div class="text-center mb-16">
+          <div
+            class="inline-block bg-accent-light text-accent text-xs font-bold px-3 py-1.5 rounded-full mb-4 tracking-wider"
+          >
+            HISTORY
+          </div>
+          <h2 class="text-2xl md:text-[32px] font-bold">연혁</h2>
+        </div>
+        <div
+          class="relative border-l-2 border-accent/20 pl-8 md:pl-10 space-y-12"
+        >
+          <div class="relative fade-up">
+            <div
+              class="absolute -left-[41px] md:-left-[45px] w-5 h-5 rounded-full bg-accent border-4 border-white shadow-sm"
+            ></div>
+            <div
+              class="bg-white border border-border rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <p class="text-accent font-bold text-sm mb-1">2011</p>
+              <h3 class="font-semibold mb-1">G3디자인 설립</h3>
+              <p class="text-text-sub text-sm">
+                인천 서구 청라 사무소 개소, 상업공간 전문 인테리어 사업 시작
+              </p>
+            </div>
+          </div>
+          <div class="relative fade-up stagger-1">
+            <div
+              class="absolute -left-[41px] md:-left-[45px] w-5 h-5 rounded-full bg-accent/80 border-4 border-white shadow-sm"
+            ></div>
+            <div
+              class="bg-white border border-border rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <p class="text-accent font-bold text-sm mb-1">2013</p>
+              <h3 class="font-semibold mb-1">누적 시공 50건 달성</h3>
+              <p class="text-text-sub text-sm">
+                카페, 미용실, 사무실 등 다양한 상업공간 시공 경험 축적
+              </p>
+            </div>
+          </div>
+          <div class="relative fade-up stagger-2">
+            <div
+              class="absolute -left-[41px] md:-left-[45px] w-5 h-5 rounded-full bg-accent/80 border-4 border-white shadow-sm"
+            ></div>
+            <div
+              class="bg-white border border-border rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <p class="text-accent font-bold text-sm mb-1">2018</p>
+              <h3 class="font-semibold mb-1">시공 100건 돌파</h3>
+              <p class="text-text-sub text-sm">
+                인천·김포·부천·서울 수도권 전역으로 서비스 지역 확대
+              </p>
+            </div>
+          </div>
+          <div class="relative fade-up stagger-3">
+            <div
+              class="absolute -left-[41px] md:-left-[45px] w-5 h-5 rounded-full bg-accent border-4 border-white shadow-sm"
+            ></div>
+            <div
+              class="bg-white border border-border rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <p class="text-accent font-bold text-sm mb-1">2024</p>
+              <h3 class="font-semibold mb-1">누적 시공 196건+</h3>
+              <p class="text-text-sub text-sm">
+                카페 28건, 사무실 22건, 미용실 20건 등 8개 분야 전문 시공
+              </p>
+            </div>
+          </div>
+          <div class="relative fade-up stagger-4">
+            <div
+              class="absolute -left-[41px] md:-left-[45px] w-5 h-5 rounded-full bg-accent border-4 border-white shadow-sm ring-4 ring-accent/10"
+            ></div>
+            <div class="bg-accent-light border border-accent/20 rounded-xl p-5">
+              <p class="text-accent font-bold text-sm mb-1">2026</p>
+              <h3 class="font-semibold mb-1">홈페이지 리뉴얼 & 새로운 도약</h3>
+              <p class="text-text-sub text-sm">
+                디지털 전환과 함께 더 나은 서비스를 준비하고 있습니다
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICE AREAS - 대한민국 지도 -->
+    <section class="py-24 md:py-28 bg-bg-warm border-t border-border">
+      <div class="max-w-6xl mx-auto px-5 md:px-8">
+        <div class="text-center mb-16">
+          <div
+            class="inline-block bg-accent-light text-accent text-xs font-bold px-3 py-1.5 rounded-full mb-4 tracking-wider"
+          >
+            SERVICE AREA
+          </div>
+          <h2 class="text-2xl md:text-[32px] font-bold mb-3">시공 가능 지역</h2>
+          <p class="text-text-sub text-[15px]">
+            인천·경기·서울 수도권을 중심으로 서비스합니다
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <!-- Leaflet Map -->
+          <div>
+            <div
+              id="serviceMap"
+              class="w-full rounded-xl overflow-hidden border border-border"
+              style="height: 420px"
+            ></div>
+            <div class="flex items-center gap-5 mt-4 text-xs text-text-muted">
+              <span class="flex items-center gap-1.5"
+                ><span class="w-3 h-3 rounded-full bg-[#B94A2C]"></span>본사
+                (인천 청라)</span
+              >
+              <span class="flex items-center gap-1.5"
+                ><span class="w-3 h-3 rounded-full bg-accent/60"></span>시공
+                지역</span
+              >
+            </div>
+          </div>
+
+          <!-- Region Details -->
+          <div class="space-y-4">
+            <!-- 인천 (메인) -->
+            <div
+              data-detail="인천"
+              class="region-highlight bg-white border-2 border-accent/30 rounded-xl p-5 shadow-sm transition-all cursor-pointer"
+            >
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-3 h-3 rounded-full bg-accent"></div>
+                <h3 class="font-bold text-lg">
+                  인천
+                  <span class="text-accent text-sm font-medium ml-1">본사</span>
+                </h3>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="area-tag text-xs bg-accent-light text-accent px-2.5 py-1 rounded-full font-medium cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.5277"
+                  data-lng="126.6381"
+                  >청라</span
+                >
+                <span
+                  class="area-tag text-xs bg-accent-light text-accent px-2.5 py-1 rounded-full font-medium cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.5880"
+                  data-lng="126.6830"
+                  >검단</span
+                >
+                <span
+                  class="area-tag text-xs bg-accent-light text-accent px-2.5 py-1 rounded-full font-medium cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.5066"
+                  data-lng="126.7218"
+                  >부평</span
+                >
+                <span
+                  class="area-tag text-xs bg-accent-light text-accent px-2.5 py-1 rounded-full font-medium cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.3823"
+                  data-lng="126.6569"
+                  >송도</span
+                >
+                <span
+                  class="area-tag text-xs bg-accent-light text-accent px-2.5 py-1 rounded-full font-medium cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.5595"
+                  data-lng="126.7376"
+                  >계양</span
+                >
+                <span
+                  class="area-tag text-xs bg-accent-light text-accent px-2.5 py-1 rounded-full font-medium cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.5436"
+                  data-lng="126.6580"
+                  >연희동</span
+                >
+                <span
+                  class="area-tag text-xs bg-accent-light text-accent px-2.5 py-1 rounded-full font-medium cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.4933"
+                  data-lng="126.4930"
+                  >영종도</span
+                >
+                <span
+                  class="area-tag text-xs bg-accent-light text-accent px-2.5 py-1 rounded-full font-medium cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.4488"
+                  data-lng="126.7310"
+                  >남동</span
+                >
+              </div>
+            </div>
+
+            <!-- 경기 -->
+            <div
+              data-detail="경기도"
+              class="region-highlight bg-white border border-border rounded-xl p-5 transition-all cursor-pointer"
+            >
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-3 h-3 rounded-full bg-accent/70"></div>
+                <h3 class="font-bold">경기도</h3>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.6155"
+                  data-lng="126.7156"
+                  >김포</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.5034"
+                  data-lng="126.7660"
+                  >부천</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.6584"
+                  data-lng="126.8320"
+                  >일산</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.7600"
+                  data-lng="126.7800"
+                  >파주</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.1995"
+                  data-lng="126.8312"
+                  >화성</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.2636"
+                  data-lng="127.0286"
+                  >수원</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.3219"
+                  data-lng="126.8309"
+                  >안산</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.3802"
+                  data-lng="126.8025"
+                  >시흥</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.3500"
+                  data-lng="127.1200"
+                  >분당</span
+                >
+              </div>
+            </div>
+
+            <!-- 서울 -->
+            <div
+              data-detail="서울"
+              class="region-highlight bg-white border border-border rounded-xl p-5 transition-all cursor-pointer"
+            >
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-3 h-3 rounded-full bg-accent/70"></div>
+                <h3 class="font-bold">서울</h3>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.5614"
+                  data-lng="126.8360"
+                  >마곡</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.4979"
+                  data-lng="127.0276"
+                  >강남</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.5735"
+                  data-lng="126.9790"
+                  >종로</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.5476"
+                  data-lng="126.8724"
+                  >염창</span
+                >
+                <span
+                  class="area-tag text-xs bg-bg-muted text-text-sub px-2.5 py-1 rounded-full cursor-pointer hover:bg-accent hover:text-white transition"
+                  data-lat="37.4837"
+                  data-lng="127.0324"
+                  >서초</span
+                >
+              </div>
+            </div>
+
+            <p class="text-xs text-text-muted mt-4 pl-1">
+              * 기타 수도권 지역도 상담 가능합니다
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-[#F5F0E8] py-20 md:py-24 border-t border-border">
+      <div class="max-w-3xl mx-auto px-6 text-center">
+        <p class="text-accent text-sm font-semibold tracking-wider mb-4">
+          START YOUR PROJECT
+        </p>
+        <h2 class="text-2xl md:text-4xl font-bold text-text mb-3">
+          재산목록 1호의 가치를 높여드립니다
+        </h2>
+        <p class="text-text-muted mb-10 text-[15px]">
+          무료 현장 방문 상담을 신청하세요
+        </p>
+        <div
+          class="flex flex-col sm:flex-row items-center justify-center gap-3"
+        >
+          <a
+            href="/contact#form"
+            class="flex items-center gap-2 bg-accent hover:bg-accent-hover text-white px-8 py-3.5 font-semibold rounded-md text-[15px] transition"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+              />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            견적문의
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#F7F7F5] border-t border-border py-10">
+      <div
+        class="max-w-6xl mx-auto px-5 md:px-8 flex flex-col md:flex-row justify-between gap-6 text-[13px] text-text-muted"
+      >
+        <div>
+          <span class="font-extrabold text-text text-base"
+            ><span class="text-g3-red">G3</span> DESIGN</span
+          >
+          <p class="mt-2">대표: 김용석 | 사업자등록번호: 607-61-73192</p>
+          <p>인천광역시 서구 청라라임로138번길17, 1층101호</p>
+        </div>
+        <div>
+          <p>T. 032-543-6890 | M. 010-9985-6890</p>
+          <div class="flex gap-4 mt-2">
+            <a href="/privacy" class="hover:text-text transition underline"
+              >개인정보처리방침</a
+            >
+            <a href="/terms" class="hover:text-text transition underline"
+              >이용약관</a
+            >
+          </div>
+        </div>
+      </div>
+      <div
+        class="max-w-6xl mx-auto px-5 md:px-8 mt-6 pt-6 border-t border-border text-center text-xs text-text-muted"
+      >
+        &copy; 2026 G3 DESIGN &nbsp;|&nbsp; Made by
+        <a
+          href="https://polarad.co.kr"
+          target="_blank"
+          rel="noopener"
+          class="text-accent hover:underline"
+          >POLA</a
+        >
+      </div>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <button
+      id="scrollTop"
+      class="fixed bottom-8 right-4 z-40 w-11 h-11 bg-accent text-white rounded-full shadow-lg flex items-center justify-center opacity-0 transition-all duration-300 pointer-events-none hover:bg-accent-hover hover:scale-110"
+    >
+      <svg
+        width="18"
+        height="18"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+      >
+        <path d="M14 10L8 4 2 10" />
+      </svg>
+    </button>
+
+    <script>
+      // Leaflet Choropleth Map
+      const map = L.map("serviceMap", {
+        scrollWheelZoom: false,
+        zoomControl: false,
+      }).setView([37.42, 126.75], 10);
+      L.control.zoom({ position: "bottomright" }).addTo(map);
+      L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png",
+        {
+          attribution: "&copy; OpenStreetMap & CartoDB",
+          maxZoom: 18,
+        },
+      ).addTo(map);
+
+      // HQ marker
+      L.marker([37.5277, 126.6381], {
+        icon: L.divIcon({
+          className: "",
+          html: '<div style="width:18px;height:18px;background:#B94A2C;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.3)"></div>',
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
+        }),
+        zIndexOffset: 1000,
+      })
+        .addTo(map)
+        .bindPopup(
+          "<strong>G3 DESIGN 본사</strong><br>인천 서구 청라라임로138번길17",
+        );
+
+      // Service area markers
+      const goldIcon = L.divIcon({
+        className: "",
+        html: '<div style="width:10px;height:10px;background:#A17D4A;border:2px solid #fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.2)"></div>',
+        iconSize: [10, 10],
+        iconAnchor: [5, 5],
+      });
+      const areas = [
+        {
+          name: "부평",
+          lat: 37.5066,
+          lng: 126.7218,
+          info: "미용실, 사무실, 한의원",
+        },
+        {
+          name: "송도",
+          lat: 37.3823,
+          lng: 126.6569,
+          info: "이탈리안 레스토랑, PT샵",
+        },
+        { name: "계양", lat: 37.5595, lng: 126.7376, info: "미용실, 커피숍" },
+        {
+          name: "영종도",
+          lat: 37.4933,
+          lng: 126.493,
+          info: "보드카페, 칼국수, 국어학원",
+        },
+        {
+          name: "김포",
+          lat: 37.6155,
+          lng: 126.7156,
+          info: "미용실, 식당, 핸드폰매장",
+        },
+        {
+          name: "부천",
+          lat: 37.5034,
+          lng: 126.766,
+          info: "미용실, 커피숍, 모스트",
+        },
+        { name: "안산", lat: 37.3219, lng: 126.8309, info: "무인카페24" },
+        {
+          name: "화성",
+          lat: 37.1995,
+          lng: 126.8312,
+          info: "한촌설렁탕, 도로공사 카페",
+        },
+        { name: "시흥", lat: 37.3802, lng: 126.8025, info: "월곶 미용실" },
+        { name: "마곡", lat: 37.5614, lng: 126.836, info: "사무실 디자인" },
+        {
+          name: "염창",
+          lat: 37.5476,
+          lng: 126.8724,
+          info: "우림블루나인 사무실",
+        },
+        {
+          name: "구월동",
+          lat: 37.4491,
+          lng: 126.7048,
+          info: "테크노밸리 사무실",
+        },
+        {
+          name: "남동공단",
+          lat: 37.4488,
+          lng: 126.731,
+          info: "이브로 사무실",
+        },
+        { name: "작전동", lat: 37.534, lng: 126.7209, info: "삼겹살 숯불구이" },
+        {
+          name: "청라",
+          lat: 37.5277,
+          lng: 126.6381,
+          info: "대신학원, 해법영어학원",
+        },
+      ];
+      areas.forEach((a) => {
+        L.marker([a.lat, a.lng], { icon: goldIcon })
+          .addTo(map)
+          .bindPopup(
+            "<strong>" +
+              a.name +
+              '</strong><br><span style="font-size:12px;color:#666">' +
+              a.info +
+              "</span>",
+          );
+      });
+
+      // Service radius circle
+      L.circle([37.48, 126.7], {
+        radius: 30000,
+        color: "#A17D4A",
+        fillColor: "#A17D4A",
+        fillOpacity: 0.08,
+        weight: 1,
+        dashArray: "6,4",
+      }).addTo(map);
+
+      // Area tag click -> zoom to specific location
+      document.querySelectorAll(".area-tag").forEach((tag) => {
+        tag.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const lat = parseFloat(tag.dataset.lat);
+          const lng = parseFloat(tag.dataset.lng);
+          map.flyTo([lat, lng], 16, { duration: 1.2 });
+        });
+      });
+
+      // Card header click -> zoom to region center
+      document.querySelectorAll(".region-highlight").forEach((c) => {
+        c.addEventListener("click", (e) => {
+          if (e.target.classList.contains("area-tag")) return;
+          const r = c.dataset.detail;
+          const m = {
+            인천: [37.46, 126.66],
+            경기도: [37.45, 126.8],
+            서울: [37.55, 126.87],
+          };
+          if (m[r]) map.flyTo(m[r], 12, { duration: 1 });
+        });
+      });
+
+      // Stats counter animation
+      const statsObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.querySelectorAll("[data-count]").forEach((el) => {
+              const target = parseInt(el.dataset.count);
+              let current = 0;
+              const step = Math.max(1, Math.ceil(target / 50));
+              const timer = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = current.toLocaleString();
+                if (current >= target) clearInterval(timer);
+              }, 20);
+            });
+            statsObserver.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.5 },
+      );
+      const statsSection = document.querySelector("#statsSection");
+      if (statsSection) statsObserver.observe(statsSection);
+
+      // Scroll fade-up animation
+      const fadeObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+              fadeObs.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      document
+        .querySelectorAll(".fade-up")
+        .forEach((el) => fadeObs.observe(el));
+
+      // Scroll to top button
+      const scrollTopBtn = document.getElementById("scrollTop");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 500) {
+          scrollTopBtn.classList.remove("opacity-0", "pointer-events-none");
+        } else {
+          scrollTopBtn.classList.add("opacity-0", "pointer-events-none");
+        }
+      });
+      scrollTopBtn.addEventListener("click", () =>
+        window.scrollTo({ top: 0, behavior: "smooth" }),
+      );
+    </script>
+    <script src="/track.js"></script>
+    <script src="/exit-guard.js"></script>
+    <!-- MR Script Ver 2.0 -->
+    <script
+      async="true"
+      src="//log1.toup.net/mirae_log_chat_common.js?adkey=mrsbhMj"
+      charset="UTF-8"
+    ></script>
+    <!-- MR Script END Ver 2.0 -->
+  </body>
+</html>

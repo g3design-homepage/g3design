@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-M6FWVH299Y"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-M6FWVH299Y");
+    </script>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>시공 전후 비교 | G3 DESIGN - 상가인테리어 변화</title>
+    <meta
+      name="description"
+      content="G3디자인 상업공간 인테리어 시공 전후 비교. 빈 상가가 감각적인 카페, 음식점, 매장으로 변화하는 과정을 확인하세요."
+    />
+    <meta
+      name="keywords"
+      content="상업공간인테리어, 상가인테리어, 카페인테리어, 음식점인테리어, 사무실인테리어, 미용실인테리어, 학원인테리어, 인천인테리어, 청라인테리어, G3디자인"
+    />
+    <link rel="canonical" href="https://g3design.kr/before-after" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="시공 전후 비교 | G3 DESIGN - 상가인테리어 변화"
+    />
+    <meta
+      property="og:description"
+      content="G3디자인 상업공간 인테리어 시공 전후 비교. 빈 상가가 감각적인 카페, 음식점, 매장으로 변화하는 과정을 확인하세요."
+    />
+    <meta property="og:url" content="https://g3design.kr/before-after" />
+    <meta
+      property="og:image"
+      content="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/og-image.jpg"
+    />
+    <meta property="og:site_name" content="G3 DESIGN" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="시공 전후 비교 | G3 DESIGN - 상가인테리어 변화"
+    />
+    <meta
+      name="twitter:description"
+      content="G3디자인 상업공간 인테리어 시공 전후 비교. 빈 상가가 감각적인 카페, 음식점, 매장으로 변화하는 과정을 확인하세요."
+    />
+    <meta
+      name="twitter:image"
+      content="https://pub-64e468fed30d4c00aefa275f39dd9f92.r2.dev/images/og-image.jpg"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: "#FFFFFF",
+              "bg-warm": "#FAFAF8",
+              text: "#1A1A1A",
+              "text-sub": "#555555",
+              "text-muted": "#999999",
+              accent: "#B94A2C",
+              "accent-hover": "#9A3D24",
+              "accent-light": "#F8EDE9",
+              border: "#E8E8E6",
+              dark: "#1C1917",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      * {
+        font-family: "Pretendard Variable", "Pretendard", system-ui, sans-serif;
+      }
+      body {
+        animation: pageIn 0.5s ease-out;
+      }
+      @keyframes pageIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Before/After Slider */
+      .ba-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px;
+        cursor: col-resize;
+        user-select: none;
+        aspect-ratio: 4/3;
+      }
+      .ba-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .ba-after-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .ba-divider {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: #fff;
+        z-index: 10;
+        cursor: col-resize;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+      .ba-divider::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 44px;
+        height: 44px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ba-divider::after {
+        content: "◀ ▶";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 10px;
+        color: #555;
+        letter-spacing: 2px;
+        white-space: nowrap;
+        z-index: 1;
+      }
+      .ba-label {
+        position: absolute;
+        top: 16px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        z-index: 5;
+        backdrop-filter: blur(8px);
+      }
+      .ba-label-before {
+        left: 16px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+      }
+      .ba-label-after {
+        right: 16px;
+        background: rgba(185, 74, 44, 0.85);
+        color: #fff;
+      }
+
+      /* Gallery grid hover */
+      .img-card {
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+      }
+      .img-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      }
+    </style>
+  </head>
+  <body class="bg-bg text-text">
+    <!-- HEADER -->
+    <header
+      class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border"
+    >
+      <div
+        class="max-w-7xl mx-auto px-5 md:px-8 h-[72px] flex items-center justify-between"
+      >
+        <a href="/" class="text-[22px] font-extrabold tracking-tight"
+          ><span class="text-accent">G3</span> DESIGN</a
+        >
+        <nav class="hidden md:flex items-center gap-7">
+          <a
+            href="/portfolio"
+            class="text-[15px] text-text-sub hover:text-text transition"
+            >포트폴리오</a
+          >
+          <a
+            href="/about"
+            class="text-[15px] text-text-sub hover:text-text transition"
+            >회사소개</a
+          >
+          <a
+            href="/contact"
+            class="text-[15px] text-text-sub hover:text-text transition"
+            >상담 신청</a
+          >
+          <a
+            href="/contact"
+            class="bg-accent hover:bg-accent-hover text-white px-5 py-2.5 text-sm font-semibold rounded-md transition"
+            >무료 상담</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <!-- PAGE HEADER -->
+    <section class="py-12 md:py-16 text-center">
+      <div class="max-w-3xl mx-auto px-6">
+        <div
+          class="inline-block bg-accent-light text-accent text-xs font-bold px-3 py-1.5 rounded-full mb-4 tracking-wider"
+        >
+          BEFORE & AFTER
+        </div>
+        <h1 class="text-2xl md:text-4xl font-bold mb-3">시공 전/후 비교</h1>
+        <p class="text-text-sub text-[15px]">
+          빈 공간이 상업시설로 변화하는 과정을 확인하세요<br />슬라이더를 좌우로
+          드래그해보세요
+        </p>
+      </div>
+    </section>
+
+    <!-- BEFORE/AFTER SLIDER -->
+    <section class="pb-20">
+      <div class="max-w-4xl mx-auto px-5 md:px-8">
+        <div class="ba-container" id="baSlider">
+          <!-- Before (공실) -->
+          <img
+            src="generated/before_empty.png"
+            class="ba-img"
+            alt="시공 전 - 공실 상태"
+          />
+
+          <!-- After (카페) -->
+          <div
+            class="ba-after-wrap"
+            id="afterWrap"
+            style="clip-path: inset(0 0 0 50%)"
+          >
+            <img
+              src="generated/after_cafe.png"
+              class="ba-img"
+              alt="시공 후 - 카페 완성"
+            />
+          </div>
+
+          <!-- Divider line -->
+          <div class="ba-divider" id="baDivider" style="left: 50%"></div>
+
+          <!-- Labels -->
+          <span class="ba-label ba-label-before">BEFORE 시공 전</span>
+          <span class="ba-label ba-label-after">AFTER 시공 후</span>
+        </div>
+
+        <!-- Info -->
+        <div class="grid md:grid-cols-2 gap-6 mt-8">
+          <div class="bg-bg-warm border border-border rounded-xl p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-3 h-3 rounded-full bg-text-muted"></div>
+              <span class="font-bold text-sm">시공 전</span>
+            </div>
+            <p class="text-sm text-text-sub leading-relaxed">
+              지식산업센터 내 공실 상가. 콘크리트 바닥, 백색 벽면, 노출 천장,
+              형광등 조명. 약 30평 규모의 빈 직사각형 공간.
+            </p>
+          </div>
+          <div class="bg-accent-light border border-accent/20 rounded-xl p-6">
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-3 h-3 rounded-full bg-accent"></div>
+              <span class="font-bold text-sm">시공 후</span>
+            </div>
+            <p class="text-sm text-text-sub leading-relaxed">
+              2026 트렌드를 반영한 모던 카페. 원목 바닥, 플라스터 벽면, 우드
+              천장 패널, 테라조 바 카운터, 아치형 선반, 웜톤 펜던트 조명, 식물
+              배치.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIDE BY SIDE COMPARISON -->
+    <section class="py-20 bg-bg-warm border-t border-border">
+      <div class="max-w-5xl mx-auto px-5 md:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-xl md:text-2xl font-bold">나란히 비교</h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="relative rounded-xl overflow-hidden border border-border">
+            <img
+              src="generated/before_empty.png"
+              class="w-full aspect-[4/3] object-cover"
+              alt=""
+            />
+            <div
+              class="absolute top-3 left-3 bg-black/60 text-white text-xs font-semibold px-3 py-1.5 rounded-md backdrop-blur-sm"
+            >
+              BEFORE
+            </div>
+          </div>
+          <div
+            class="relative rounded-xl overflow-hidden border border-accent/30"
+          >
+            <img
+              src="generated/after_cafe.png"
+              class="w-full aspect-[4/3] object-cover"
+              alt=""
+            />
+            <div
+              class="absolute top-3 right-3 bg-accent/85 text-white text-xs font-semibold px-3 py-1.5 rounded-md backdrop-blur-sm"
+            >
+              AFTER
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONCEPT GALLERY -->
+    <section class="py-20 md:py-24">
+      <div class="max-w-6xl mx-auto px-5 md:px-8">
+        <div class="text-center mb-14">
+          <div
+            class="inline-block bg-accent-light text-accent text-xs font-bold px-3 py-1.5 rounded-full mb-4 tracking-wider"
+          >
+            CONCEPT IMAGES
+          </div>
+          <h2 class="text-2xl md:text-[32px] font-bold mb-3">
+            전문분야 컨셉 이미지
+          </h2>
+          <p class="text-text-sub text-[15px]">
+            2026 한국 상업공간 인테리어 트렌드를 반영한 컨셉 디자인
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div
+            class="img-card rounded-xl overflow-hidden border border-border bg-white"
+          >
+            <img
+              src="generated/concept_cafe.png"
+              class="w-full aspect-[4/3] object-cover"
+              alt=""
+            />
+            <div class="p-4">
+              <span
+                class="text-[11px] font-semibold text-accent bg-accent-light px-2.5 py-1 rounded-full"
+                >카페</span
+              >
+              <h3 class="font-semibold mt-2 text-[15px]">모던 카페 인테리어</h3>
+              <p class="text-xs text-text-muted mt-1">
+                소프트 미니멀리즘 · 바이오필릭 · 어스톤
+              </p>
+            </div>
+          </div>
+          <div
+            class="img-card rounded-xl overflow-hidden border border-border bg-white"
+          >
+            <img
+              src="generated/concept_beauty.png"
+              class="w-full aspect-[4/3] object-cover"
+              alt=""
+            />
+            <div class="p-4">
+              <span
+                class="text-[11px] font-semibold text-accent bg-accent-light px-2.5 py-1 rounded-full"
+                >미용실</span
+              >
+              <h3 class="font-semibold mt-2 text-[15px]">프리미엄 뷰티 살롱</h3>
+              <p class="text-xs text-text-muted mt-1">
+                소프트 럭셔리 · 스마트 미러 · 테라조
+              </p>
+            </div>
+          </div>
+          <div
+            class="img-card rounded-xl overflow-hidden border border-border bg-white"
+          >
+            <img
+              src="generated/concept_restaurant.png"
+              class="w-full aspect-[4/3] object-cover"
+              alt=""
+            />
+            <div class="p-4">
+              <span
+                class="text-[11px] font-semibold text-accent bg-accent-light px-2.5 py-1 rounded-full"
+                >식당</span
+              >
+              <h3 class="font-semibold mt-2 text-[15px]">모던 레스토랑</h3>
+              <p class="text-xs text-text-muted mt-1">
+                커브드 뱅킷 · 오픈키친 · 앰버 라이팅
+              </p>
+            </div>
+          </div>
+          <div
+            class="img-card rounded-xl overflow-hidden border border-border bg-white"
+          >
+            <img
+              src="generated/concept_office.png"
+              class="w-full aspect-[4/3] object-cover"
+              alt=""
+            />
+            <div class="p-4">
+              <span
+                class="text-[11px] font-semibold text-accent bg-accent-light px-2.5 py-1 rounded-full"
+                >사무실</span
+              >
+              <h3 class="font-semibold mt-2 text-[15px]">하이브리드 오피스</h3>
+              <p class="text-xs text-text-muted mt-1">
+                모듈러 레이아웃 · 미팅팟 · 바이오필릭
+              </p>
+            </div>
+          </div>
+          <div
+            class="img-card rounded-xl overflow-hidden border border-border bg-white"
+          >
+            <img
+              src="generated/concept_academy.png"
+              class="w-full aspect-[4/3] object-cover"
+              alt=""
+            />
+            <div class="p-4">
+              <span
+                class="text-[11px] font-semibold text-accent bg-accent-light px-2.5 py-1 rounded-full"
+                >학원</span
+              >
+              <h3 class="font-semibold mt-2 text-[15px]">모던 러닝 스페이스</h3>
+              <p class="text-xs text-text-muted mt-1">
+                웨이브 어쿠스틱 · 모듈러 데스크 · 웜톤
+              </p>
+            </div>
+          </div>
+          <div
+            class="img-card rounded-xl overflow-hidden border border-border bg-white"
+          >
+            <img
+              src="generated/concept_retail.png"
+              class="w-full aspect-[4/3] object-cover"
+              alt=""
+            />
+            <div class="p-4">
+              <span
+                class="text-[11px] font-semibold text-accent bg-accent-light px-2.5 py-1 rounded-full"
+                >매장</span
+              >
+              <h3 class="font-semibold mt-2 text-[15px]">
+                프리미엄 리테일 부티크
+              </h3>
+              <p class="text-xs text-text-muted mt-1">
+                갤러리 스타일 · 커브드 디스플레이 · 브라스
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HERO IMAGES PREVIEW -->
+    <section class="py-20 bg-dark">
+      <div class="max-w-6xl mx-auto px-5 md:px-8">
+        <div class="text-center mb-12">
+          <div
+            class="inline-block bg-white/10 text-white/80 text-xs font-bold px-3 py-1.5 rounded-full mb-4 tracking-wider"
+          >
+            HERO BANNERS
+          </div>
+          <h2 class="text-2xl md:text-[32px] font-bold text-white mb-3">
+            히어로 배너 이미지
+          </h2>
+        </div>
+        <div class="space-y-6">
+          <div class="rounded-xl overflow-hidden border border-white/10">
+            <img
+              src="generated/hero_main.png"
+              class="w-full aspect-[16/7] object-cover"
+              alt="히어로 메인"
+            />
+            <div class="bg-white/5 p-4">
+              <span class="text-white/60 text-sm"
+                >히어로 메인 — 그랜드 커머셜 스페이스</span
+              >
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="rounded-xl overflow-hidden border border-white/10">
+              <img
+                src="generated/hero_sub1.png"
+                class="w-full aspect-[16/9] object-cover"
+                alt="히어로 서브1"
+              />
+              <div class="bg-white/5 p-3">
+                <span class="text-white/60 text-xs"
+                  >히어로 서브 — 카페 리노베이션</span
+                >
+              </div>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-white/10">
+              <img
+                src="generated/hero_sub2.png"
+                class="w-full aspect-[16/9] object-cover"
+                alt="히어로 서브2"
+              />
+              <div class="bg-white/5 p-3">
+                <span class="text-white/60 text-xs"
+                  >히어로 서브 — 레스토랑 인테리어</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-16 text-center border-t border-border">
+      <h2 class="text-xl font-bold mb-3">이런 공간을 만들고 싶으신가요?</h2>
+      <p class="text-text-sub text-[15px] mb-8">
+        무료 현장 방문 상담을 신청하세요
+      </p>
+      <a
+        href="/contact"
+        class="bg-accent hover:bg-accent-hover text-white px-8 py-3.5 font-semibold rounded-md transition inline-block"
+        >무료 상담 신청</a
+      >
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#F7F7F5] border-t border-border py-10">
+      <div
+        class="max-w-6xl mx-auto px-5 md:px-8 flex justify-center gap-4 text-xs text-text-muted mb-4"
+      >
+        <a href="/privacy" class="hover:text-text transition underline"
+          >개인정보처리방침</a
+        >
+        <a href="/terms" class="hover:text-text transition underline"
+          >이용약관</a
+        >
+      </div>
+      <div
+        class="max-w-6xl mx-auto px-5 md:px-8 text-center text-xs text-text-muted"
+      >
+        &copy; 2026 G3 DESIGN &nbsp;|&nbsp; Made by
+        <a
+          href="https://polarad.co.kr"
+          target="_blank"
+          rel="noopener"
+          class="text-accent hover:underline"
+          >POLA</a
+        >
+      </div>
+    </footer>
+
+    <!-- Before/After Slider JS -->
+    <script>
+      const slider = document.getElementById("baSlider");
+      const divider = document.getElementById("baDivider");
+      const afterWrap = document.getElementById("afterWrap");
+      let isDragging = false;
+
+      function updatePosition(x) {
+        const rect = slider.getBoundingClientRect();
+        let pct = ((x - rect.left) / rect.width) * 100;
+        pct = Math.max(5, Math.min(95, pct));
+        divider.style.left = pct + "%";
+        afterWrap.style.clipPath = `inset(0 0 0 ${pct}%)`;
+      }
+
+      slider.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        updatePosition(e.clientX);
+      });
+      window.addEventListener("mousemove", (e) => {
+        if (isDragging) updatePosition(e.clientX);
+      });
+      window.addEventListener("mouseup", () => {
+        isDragging = false;
+      });
+
+      // Touch support
+      slider.addEventListener(
+        "touchstart",
+        (e) => {
+          isDragging = true;
+          updatePosition(e.touches[0].clientX);
+        },
+        { passive: true },
+      );
+      window.addEventListener(
+        "touchmove",
+        (e) => {
+          if (isDragging) updatePosition(e.touches[0].clientX);
+        },
+        { passive: true },
+      );
+      window.addEventListener("touchend", () => {
+        isDragging = false;
+      });
+    </script>
+    <script src="/track.js"></script>
+    <script src="/exit-guard.js"></script>
+    <!-- MR Script Ver 2.0 -->
+    <script
+      async="true"
+      src="//log1.toup.net/mirae_log_chat_common.js?adkey=mrsbhMj"
+      charset="UTF-8"
+    ></script>
+    <!-- MR Script END Ver 2.0 -->
+  </body>
+</html>

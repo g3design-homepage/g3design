@@ -4,7 +4,11 @@
  * 진입 시 히스토리 엔트리를 1개 심어 두고, 뒤로가기가 그 엔트리를 소비하면
  * 페이지를 떠나는 대신 상담 유도 팝업을 띄운다. 팝업의 "다음에 볼게요"를 누르면
  * 실제로 이전 페이지(광고 등)로 내보내므로 방문자를 가두지 않는다.
- * 거부감을 줄이기 위해 한 세션에 1회만 작동한다.
+ *
+ * 이탈을 시도할 때마다 작동한다. 같은 방문자가 팝업을 닫고 사이트를 더 둘러본 뒤
+ * 다시 나가려 해도, 다른 페이지로 이동한 뒤에 나가려 해도 똑같이 뜬다. 대신 팝업이
+ * 떠 있는 상태에서 뒤로가기를 한 번 더 누르면 그때는 붙잡지 않고 내보낸다. 이
+ * 탈출구가 없으면 브라우저 뒤로가기로는 영영 못 나가는 구조가 되기 때문이다.
  *
  * 오버레이(모달·라이트박스)와의 충돌은 history.state 마커로 구분한다.
  * 스택이 [진입(g3Entry), 가드(g3Guard), 오버레이(g3Overlay)] 순으로 쌓이므로,
@@ -20,23 +24,8 @@
 (function () {
   "use strict";
 
-  var SESSION_KEY = "g3ExitGuardShown";
   var armed = true;
   var popup = null;
-
-  function shown() {
-    try {
-      return sessionStorage.getItem(SESSION_KEY) === "1";
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function markShown() {
-    try {
-      sessionStorage.setItem(SESSION_KEY, "1");
-    } catch (e) {}
-  }
 
   // 상담을 이미 남긴 방문자에게는 띄우지 않는다 (contact 완료 화면이 노출된 상태)
   function submitted() {
@@ -44,7 +33,9 @@
     return !!(ok && !ok.classList.contains("hidden"));
   }
 
-  if (shown()) return;
+  function isOpen() {
+    return !!(popup && popup.classList.contains("open"));
+  }
 
   // 진입 엔트리에 마커를 남기고, 그 위에 가드 엔트리를 1개 쌓는다
   history.replaceState({ g3Entry: 1 }, "");
@@ -126,26 +117,35 @@
     location.href = "/contact#form";
   }
 
-  // 실제 이탈: 팝업이 떠 있는 시점의 현재 엔트리가 진입 엔트리이므로 1회로 나간다
+  // 실제 이탈: 팝업을 띄우면서 가드 엔트리를 다시 쌓았으므로 2칸을 물러난다
   function leave() {
     armed = false;
     hide();
-    history.back();
+    history.go(-2);
   }
 
   window.addEventListener("popstate", function () {
     var st = history.state;
     if (!st || st.g3Entry !== 1) return; // 오버레이를 닫는 뒤로가기는 그냥 통과시킨다
 
-    // 이미 팝업을 봤거나, 상담을 남겼거나, 나가기를 누른 방문자는 붙잡지 않는다.
-    // 가드 엔트리 때문에 뒤로가기 1회가 헛돌지 않도록 남은 엔트리를 대신 소비한다.
-    if (!armed || shown() || submitted()) {
+    // 나가기를 눌렀거나 이미 상담을 남긴 방문자는 붙잡지 않는다. 가드 엔트리 때문에
+    // 뒤로가기 1회가 헛돌지 않도록 남은 엔트리를 대신 소비한다.
+    if (!armed || submitted()) {
       armed = false;
       history.back();
       return;
     }
 
-    markShown();
+    // 팝업이 떠 있는데 또 뒤로가기를 눌렀다면 정말 나가려는 뜻이므로 그대로 보낸다.
+    // 이 탈출구가 없으면 브라우저 뒤로가기로는 영영 못 나가는 구조가 된다.
+    if (isOpen()) {
+      armed = false;
+      hide();
+      history.back();
+      return;
+    }
+
+    history.pushState({ g3Guard: 1 }, ""); // 다음 이탈 시도도 잡도록 가드를 다시 쌓는다
     show();
   });
 })();
