@@ -1,0 +1,4665 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>G3 Design 관리자</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      :root {
+        --g3-primary: #1a1a1a;
+        --g3-red: #b94a2c;
+        --g3-gold: #a17d4a;
+        --g3-gold-light: #c9a97a;
+        --g3-beige: #f5f0e8;
+        --g3-bg: #f8f8f6;
+        --sidebar-w: 240px;
+        --n50: #f9fafb;
+        --n100: #f3f4f6;
+        --n200: #e5e7eb;
+        --n300: #d1d5db;
+        --n400: #9ca3af;
+        --n500: #6b7280;
+        --n600: #4b5563;
+        --n700: #374151;
+        --n800: #1f2937;
+        --n900: #111827;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          "Pretendard Variable",
+          Pretendard,
+          -apple-system,
+          sans-serif;
+        background: var(--g3-bg);
+        color: var(--g3-primary);
+      }
+
+      /* LOGIN */
+      #login-screen {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      }
+      .login-card {
+        background: white;
+        border-radius: 16px;
+        padding: 48px 40px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+      .login-logo {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+      .login-logo .brand {
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+      .login-logo .brand span {
+        color: var(--g3-gold);
+      }
+      .login-logo .sub {
+        font-size: 13px;
+        color: var(--n500);
+        margin-top: 4px;
+      }
+      .login-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--n900);
+        margin-bottom: 8px;
+        text-align: center;
+      }
+      .login-desc {
+        font-size: 13px;
+        color: var(--n500);
+        text-align: center;
+        margin-bottom: 28px;
+        line-height: 1.5;
+      }
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .form-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--n700);
+        margin-bottom: 6px;
+      }
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1.5px solid var(--n200);
+        border-radius: 8px;
+        font-size: 15px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+        letter-spacing: 0;
+        text-align: left;
+      }
+      .form-input:focus {
+        border-color: var(--g3-gold);
+      }
+      .form-input.password-input {
+        letter-spacing: 1px;
+      }
+      .btn-full {
+        width: 100%;
+        padding: 13px;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+      }
+      .btn-primary-login {
+        background: var(--g3-gold);
+        color: white;
+        margin-bottom: 10px;
+      }
+      .btn-primary-login:hover {
+        background: #8a6a3a;
+      }
+      .btn-secondary-login {
+        background: var(--n100);
+        color: var(--n700);
+      }
+      .btn-secondary-login:hover {
+        background: var(--n200);
+      }
+      .btn-link-login {
+        background: transparent;
+        color: var(--n500);
+        border: none;
+        cursor: pointer;
+        display: block;
+        font-family: inherit;
+        font-size: 13px;
+        margin: 2px auto 0;
+        padding: 6px 8px;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .btn-link-login:hover {
+        color: var(--g3-gold);
+      }
+      .login-help {
+        color: var(--n400);
+        font-size: 12px;
+        line-height: 1.6;
+        margin: 12px 0 0;
+        text-align: center;
+      }
+      .login-msg {
+        font-size: 13px;
+        text-align: center;
+        margin-top: 12px;
+        min-height: 20px;
+      }
+      .login-msg.error {
+        color: var(--g3-red);
+      }
+      .login-msg.success {
+        color: #16a34a;
+      }
+
+      /* LAYOUT */
+      #app {
+        display: none;
+      }
+      .db-container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* SIDEBAR */
+      .db-sidebar {
+        width: var(--sidebar-w);
+        background: linear-gradient(180deg, #8b6a3c 0%, #a17d4a 100%);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 100;
+        transition: transform 0.3s ease;
+      }
+      .db-sidebar-header {
+        padding: 24px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .db-logo {
+        font-size: 20px;
+        font-weight: 800;
+        color: white;
+        letter-spacing: -0.3px;
+      }
+      .db-logo span {
+        color: #ffe8c8;
+      }
+      .db-logo-sub {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 3px;
+      }
+      .db-sidebar-nav {
+        flex: 1;
+        padding: 12px 10px;
+        overflow-y: auto;
+      }
+      .db-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 14px;
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        border-radius: 8px;
+        margin-bottom: 2px;
+        transition: all 0.2s;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        background: none;
+        border: none;
+        width: 100%;
+        text-align: left;
+        position: relative;
+      }
+      .db-nav-item:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+      }
+      .db-nav-item.active {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border-left: 3px solid #fff;
+      }
+      .db-nav-badge {
+        margin-left: auto;
+        background: var(--g3-red);
+        color: white;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 1px 7px;
+        border-radius: 10px;
+        min-width: 20px;
+        text-align: center;
+      }
+      .db-sidebar-footer {
+        padding: 12px 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .db-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+      }
+      .db-overlay.open {
+        display: block;
+      }
+
+      /* MAIN */
+      .db-main {
+        flex: 1;
+        margin-left: var(--sidebar-w);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .db-header {
+        background: white;
+        border-bottom: 1px solid var(--n200);
+        padding: 0 24px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .db-header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .db-mobile-menu {
+        display: none;
+        width: 36px;
+        height: 36px;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        color: var(--n700);
+        cursor: pointer;
+        border-radius: 6px;
+      }
+      .db-mobile-menu:hover {
+        background: var(--n100);
+      }
+      .db-header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .db-user {
+        font-size: 13px;
+        color: var(--n600);
+      }
+      .db-btn-logout {
+        padding: 7px 14px;
+        background: var(--n100);
+        border: none;
+        border-radius: 7px;
+        font-size: 13px;
+        color: var(--n700);
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+      }
+      .db-btn-logout:hover {
+        background: var(--n200);
+      }
+
+      .db-content {
+        padding: 28px 24px;
+        flex: 1;
+      }
+
+      /* PAGE SECTIONS */
+      .page-section {
+        display: none;
+      }
+      .page-section.active {
+        display: block;
+        padding-bottom: 150px;
+      }
+
+      /* PAGE HEADER */
+      .page-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--n900);
+        margin-bottom: 4px;
+      }
+      .page-sub {
+        font-size: 13px;
+        color: var(--n500);
+        margin-bottom: 24px;
+      }
+
+      /* STAT CARDS */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        border: 1px solid var(--n200);
+        transition: all 0.2s;
+      }
+      .stat-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+      .stat-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .stat-icon.red {
+        background: #fee2e2;
+        color: var(--g3-red);
+      }
+      .stat-icon.gold {
+        background: #fef3c7;
+        color: var(--g3-gold);
+      }
+      .stat-icon.green {
+        background: #d1fae5;
+        color: #059669;
+      }
+      .stat-icon.blue {
+        background: #dbeafe;
+        color: #2563eb;
+      }
+      .stat-label {
+        font-size: 12px;
+        color: var(--n500);
+        margin-bottom: 4px;
+      }
+      .stat-value {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--n900);
+        line-height: 1;
+      }
+
+      /* CARD */
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        border: 1px solid var(--n200);
+        margin-bottom: 20px;
+      }
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+      }
+      .card-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--n800);
+      }
+      .card-link {
+        font-size: 13px;
+        color: var(--g3-gold);
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .card-link:hover {
+        text-decoration: underline;
+      }
+
+      /* TABLE */
+      .table-wrap {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 11px 14px;
+        text-align: left;
+        border-bottom: 1px solid var(--n100);
+        white-space: nowrap;
+      }
+      th {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--n500);
+        background: var(--n50);
+      }
+      td {
+        font-size: 13px;
+        color: var(--n700);
+      }
+      tbody tr:hover {
+        background: #fafafa;
+        cursor: pointer;
+      }
+      .empty-row td {
+        text-align: center;
+        padding: 40px;
+        color: var(--n400);
+        cursor: default;
+      }
+
+      /* RECENT LEADS CARDS */
+      .recent-leads-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 0 16px 16px;
+      }
+      @media (max-width: 768px) {
+        .recent-leads-cards {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* LEADS STATS BAR */
+      .leads-stats {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        background: #fff;
+        border: 1px solid var(--n100);
+        border-radius: 10px;
+        padding: 14px 0;
+        margin-bottom: 16px;
+      }
+      .leads-stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+      }
+      .leads-stat-num {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--n800);
+        line-height: 1;
+      }
+      .leads-stat-label {
+        font-size: 11px;
+        color: var(--n400);
+        margin-top: 4px;
+      }
+      .leads-stat-divider {
+        width: 1px;
+        height: 32px;
+        background: var(--n100);
+      }
+      .leads-stat-today .leads-stat-num {
+        color: var(--g3-gold);
+      }
+
+      /* LEAD CARDS */
+      .leads-desktop {
+        display: none !important;
+      }
+      .leads-mobile {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      @media (max-width: 768px) {
+        .leads-mobile {
+          grid-template-columns: 1fr;
+        }
+      }
+      .lead-card {
+        background: #fff;
+        border: 1px solid var(--n200);
+        border-left: 3px solid var(--g3-gold);
+        border-radius: 10px;
+        padding: 14px 16px;
+        cursor: pointer;
+        transition:
+          box-shadow 0.15s,
+          border-color 0.15s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }
+      .lead-card + .lead-card {
+        margin-top: 2px;
+      }
+      .lead-card:hover {
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        border-left-color: var(--g3-red);
+      }
+      .lead-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .lead-card-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--n800);
+      }
+      .lead-card-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 12px;
+        font-size: 13px;
+        color: var(--n600);
+      }
+      .lead-card-label {
+        font-size: 11px;
+        color: var(--n400);
+        margin-bottom: 1px;
+      }
+      .lead-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid var(--n100);
+      }
+      .lead-card-actions {
+        display: flex;
+        gap: 6px;
+      }
+
+      /* BADGES */
+      .badge {
+        display: inline-block;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .badge-new {
+        background: #fee2e2;
+        color: var(--g3-red);
+      }
+      .badge-progress {
+        background: #fef3c7;
+        color: #b45309;
+      }
+      .badge-done {
+        background: #d1fae5;
+        color: #059669;
+      }
+
+      /* STATUS SELECT */
+      .status-select {
+        padding: 4px 8px;
+        border: none;
+        border-radius: 14px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        outline: none;
+      }
+      .status-select.s-new {
+        background: var(--g3-gold);
+        color: #fff;
+      }
+      .status-select.s-progress {
+        background: var(--g3-gold);
+        color: #fff;
+        opacity: 0.8;
+      }
+      .status-select.s-done {
+        background: var(--n300);
+        color: #fff;
+      }
+
+      /* FILTER TABS */
+      .filter-tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .filter-tab {
+        padding: 7px 16px;
+        border: 1.5px solid var(--n200);
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        background: white;
+        color: var(--n600);
+        font-family: inherit;
+        transition: all 0.15s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .filter-tab:hover {
+        border-color: var(--g3-gold);
+        color: var(--g3-gold);
+      }
+      .filter-tab.active {
+        background: var(--g3-gold);
+        border-color: var(--g3-gold);
+        color: white;
+      }
+      .tab-count {
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      /* SEARCH ROW */
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .search-box {
+        display: flex;
+        gap: 8px;
+      }
+      .search-input {
+        padding: 9px 14px;
+        border: 1.5px solid var(--n200);
+        border-radius: 8px;
+        font-size: 13px;
+        font-family: inherit;
+        outline: none;
+        width: 240px;
+        transition: border-color 0.2s;
+      }
+      .search-input:focus {
+        border-color: var(--g3-gold);
+      }
+
+      /* BUTTONS */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .btn-gold {
+        background: var(--g3-gold);
+        color: white;
+      }
+      .btn-gold:hover {
+        background: #8a6a3a;
+      }
+      .btn-red {
+        background: var(--g3-red);
+        color: white;
+      }
+      .btn-red:hover {
+        background: #9a3c22;
+      }
+      .btn-ghost {
+        background: var(--n100);
+        color: var(--n700);
+      }
+      .btn-ghost:hover {
+        background: var(--n200);
+      }
+      .btn-icon {
+        width: 30px;
+        height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--n100);
+        border: none;
+        border-radius: 6px;
+        color: var(--n600);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .btn-icon:hover {
+        background: var(--n200);
+        color: var(--n800);
+      }
+      .btn-icon-danger:hover {
+        background: #fee2e2;
+        color: var(--g3-red);
+      }
+
+      /* PAGINATION */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        padding-top: 20px;
+        margin-top: 4px;
+        border-top: 1px solid var(--n100);
+      }
+      .pg-btn {
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--n100);
+        border: none;
+        border-radius: 7px;
+        color: var(--n600);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .pg-btn:hover:not(:disabled) {
+        background: var(--g3-gold);
+        color: white;
+      }
+      .pg-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .pg-info {
+        font-size: 13px;
+        color: var(--n600);
+      }
+
+      /* MODAL */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: 16px;
+      }
+      .modal {
+        background: white;
+        border-radius: 14px;
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      }
+      .modal-lg {
+        max-width: 720px;
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--n200);
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 1;
+      }
+      .modal-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--n900);
+      }
+      .modal-close {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        color: var(--n400);
+        cursor: pointer;
+        border-radius: 6px;
+      }
+      .modal-close:hover {
+        background: var(--n100);
+        color: var(--n700);
+      }
+      .modal-body {
+        padding: 22px;
+      }
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 14px 22px;
+        border-top: 1px solid var(--n200);
+        background: var(--n50);
+      }
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+      .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .detail-item.full {
+        grid-column: 1 / -1;
+      }
+      .detail-item label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--n400);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .detail-item span {
+        font-size: 14px;
+        color: var(--n800);
+      }
+      .detail-item p {
+        font-size: 13px;
+        color: var(--n700);
+        padding: 10px 12px;
+        background: var(--n50);
+        border-radius: 8px;
+        line-height: 1.6;
+        margin: 0;
+        white-space: pre-wrap;
+      }
+
+      /* FORM */
+      .form-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+      .form-row.single {
+        grid-template-columns: 1fr;
+      }
+      .form-row.triple {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .field-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--n600);
+      }
+      .field-input,
+      .field-select,
+      .field-textarea {
+        padding: 10px 12px;
+        border: 1.5px solid var(--n200);
+        border-radius: 8px;
+        font-size: 13px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+        background: white;
+      }
+      .field-input:focus,
+      .field-select:focus,
+      .field-textarea:focus {
+        border-color: var(--g3-gold);
+      }
+      .field-textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      /* PHOTO GRID */
+      .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .photo-thumb {
+        aspect-ratio: 1;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--n200);
+        cursor: pointer;
+        position: relative;
+      }
+      .photo-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .photo-thumb .photo-actions {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 4px;
+        opacity: 1;
+      }
+      .photo-actions a {
+        color: white;
+        font-size: 10px;
+        text-decoration: none;
+        padding: 2px 6px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.15);
+      }
+      .photo-actions a:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      /* ANALYTICS */
+      .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .analytics-grid > * {
+        min-width: 0;
+        overflow: hidden;
+      }
+      .chart-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .chart-grid > * {
+        min-width: 0;
+        overflow: hidden;
+      }
+      .analytics-bottom-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      .analytics-bottom-grid > * {
+        min-width: 0;
+        overflow: hidden;
+      }
+      .device-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .device-bar-wrap {
+        flex: 1;
+        background: var(--n100);
+        border-radius: 4px;
+        height: 8px;
+        overflow: hidden;
+      }
+      .device-bar {
+        height: 8px;
+        border-radius: 4px;
+      }
+      .period-btn {
+        padding: 6px 14px;
+        border: 1.5px solid var(--n200);
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        background: white;
+        color: var(--n600);
+        font-family: inherit;
+        transition: all 0.15s;
+      }
+      .period-btn.active {
+        background: var(--g3-gold);
+        border-color: var(--g3-gold);
+        color: white;
+      }
+
+      /* PORTFOLIO GRID */
+      .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+      .portfolio-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid var(--n200);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s;
+        position: relative;
+        user-select: none;
+      }
+      .portfolio-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+      }
+      .portfolio-card.pf-dragging {
+        opacity: 0.35;
+        transform: scale(0.95);
+        box-shadow: none;
+      }
+      .portfolio-card.pf-drag-over-left {
+        border-left: 3px solid var(--g3-gold);
+        transform: translateX(3px);
+      }
+      .portfolio-card.pf-drag-over-right {
+        border-right: 3px solid var(--g3-gold);
+        transform: translateX(-3px);
+      }
+      .portfolio-card.pf-move-flash {
+        animation: pfFlash 0.6s ease;
+      }
+      @keyframes pfFlash {
+        0% {
+          box-shadow: 0 0 0 3px var(--g3-gold);
+        }
+        100% {
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+      }
+      .portfolio-thumb {
+        aspect-ratio: 16/10;
+        background: var(--g3-beige);
+        overflow: hidden;
+        position: relative;
+      }
+      .portfolio-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .portfolio-thumb .no-img {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--n300);
+        font-size: 13px;
+      }
+      /* DRAG HANDLE */
+      .pf-drag-handle {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        width: 28px;
+        height: 28px;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(4px);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: grab;
+        opacity: 0;
+        transition: opacity 0.15s;
+        z-index: 3;
+        color: white;
+      }
+      .portfolio-card:hover .pf-drag-handle {
+        opacity: 1;
+      }
+      .pf-drag-handle:active {
+        cursor: grabbing;
+      }
+      /* ORDER BADGE */
+      .pf-order-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        min-width: 26px;
+        height: 26px;
+        padding: 0 7px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(4px);
+        color: white;
+      }
+      .pf-order-badge:hover {
+        background: var(--g3-gold);
+        transform: scale(1.1);
+      }
+      .pf-order-badge.editing {
+        background: var(--g3-gold);
+        min-width: 48px;
+        box-shadow: 0 2px 8px rgba(184, 134, 11, 0.4);
+      }
+      .pf-order-badge input {
+        width: 36px;
+        background: transparent;
+        border: none;
+        color: white;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 700;
+        outline: none;
+      }
+      .portfolio-info {
+        padding: 12px;
+      }
+      .portfolio-cat {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--g3-gold);
+        margin-bottom: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .portfolio-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--n800);
+        margin-bottom: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .portfolio-actions {
+        display: flex;
+        gap: 4px;
+      }
+      /* PORTFOLIO SORT SELECT */
+      .pf-sort-select {
+        padding: 7px 32px 7px 12px;
+        border: 1px solid var(--n200);
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--n700);
+        background: white
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E")
+          no-repeat right 10px center;
+        appearance: none;
+        cursor: pointer;
+      }
+      /* REORDER TOAST */
+      .pf-toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(80px);
+        background: var(--g3-dark);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 9999;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+      }
+      .pf-toast.show {
+        transform: translateX(-50%) translateY(0);
+        pointer-events: auto;
+      }
+      .pf-toast .pf-undo {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .pf-toast .pf-undo:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      /* POPUP LIST */
+      .popup-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .popup-item {
+        background: white;
+        border: 1px solid var(--n200);
+        border-radius: 10px;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .popup-preview {
+        width: 80px;
+        height: 50px;
+        border-radius: 6px;
+        overflow: hidden;
+        background: var(--n100);
+        flex-shrink: 0;
+      }
+      .popup-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .popup-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .popup-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--n800);
+        margin-bottom: 3px;
+      }
+      .popup-meta {
+        font-size: 12px;
+        color: var(--n500);
+      }
+      .popup-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* TOGGLE */
+      .toggle-wrap {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .toggle {
+        position: relative;
+        width: 40px;
+        height: 22px;
+        background: var(--n300);
+        border-radius: 11px;
+        cursor: pointer;
+        transition: background 0.2s;
+        border: none;
+        flex-shrink: 0;
+      }
+      .toggle.on {
+        background: #22c55e;
+      }
+      .toggle::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 18px;
+        height: 18px;
+        background: white;
+        border-radius: 50%;
+        transition: transform 0.2s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+      .toggle.on::after {
+        transform: translateX(18px);
+      }
+      .toggle-label {
+        font-size: 12px;
+        color: var(--n600);
+      }
+
+      /* DROPZONE */
+      .dropzone {
+        border: 2px dashed var(--n300);
+        border-radius: 10px;
+        padding: 28px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: var(--n50);
+      }
+      .dropzone:hover,
+      .dropzone.drag-over {
+        border-color: var(--g3-gold);
+        background: #fef9f4;
+      }
+      .dropzone p {
+        font-size: 13px;
+        color: var(--n500);
+        margin-top: 8px;
+      }
+      .dropzone .dz-icon {
+        color: var(--n300);
+      }
+
+      /* LOADING */
+      .spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid var(--n200);
+        border-top-color: var(--g3-gold);
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        margin: 0 auto;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .loading-center {
+        text-align: center;
+        padding: 48px;
+      }
+
+      /* TOP PAGES */
+      .top-pages-list {
+        list-style: none;
+      }
+      .top-pages-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--n100);
+        font-size: 13px;
+      }
+      .top-pages-list li:last-child {
+        border-bottom: none;
+      }
+      .page-path {
+        color: var(--n700);
+      }
+      .page-views {
+        color: var(--n500);
+        font-weight: 600;
+      }
+
+      /* BOTTOM NAV (mobile) */
+      .db-bottom-nav {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        border-top: 1px solid var(--n200);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
+        z-index: 200;
+        padding-bottom: env(safe-area-inset-bottom, 0);
+      }
+      .db-bottom-list {
+        display: flex;
+        list-style: none;
+      }
+      .db-bottom-item {
+        flex: 1;
+      }
+      .db-bottom-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 10px 4px 8px;
+        color: var(--n400);
+        text-decoration: none;
+        font-size: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: color 0.15s;
+      }
+      .db-bottom-link:hover,
+      .db-bottom-link.active {
+        color: var(--g3-gold);
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 1024px) {
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .analytics-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .chart-grid {
+          grid-template-columns: 1fr;
+        }
+        .portfolio-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 768px) {
+        .db-sidebar {
+          transform: translateX(-100%);
+        }
+        .db-sidebar.open {
+          transform: translateX(0);
+        }
+        .db-main {
+          margin-left: 0;
+        }
+        .db-content {
+          padding: 16px;
+          padding-bottom: 80px;
+        }
+        .db-mobile-menu {
+          display: flex;
+        }
+        .db-bottom-nav {
+          display: block;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
+        .stat-card {
+          padding: 14px;
+        }
+        .stat-value {
+          font-size: 22px;
+        }
+        .toolbar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .search-input {
+          width: 100%;
+        }
+        .analytics-grid {
+          grid-template-columns: 1fr;
+        }
+        .analytics-bottom-grid {
+          grid-template-columns: 1fr;
+        }
+        .chart-grid {
+          grid-template-columns: 1fr;
+        }
+        .portfolio-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .detail-grid {
+          grid-template-columns: 1fr;
+        }
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+        .form-row.triple {
+          grid-template-columns: 1fr;
+        }
+        .photo-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 480px) {
+        .stats-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .photo-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .login-card {
+          padding: 32px 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen">
+      <div class="login-card">
+        <div class="login-logo">
+          <div class="brand">G3 <span>DESIGN</span></div>
+          <div class="sub">인테리어 전문 관리자 시스템</div>
+        </div>
+        <h2 class="login-title">관리자 로그인</h2>
+        <p class="login-desc">
+          아이디와 비밀번호로 관리자 대시보드에 접속하세요
+        </p>
+        <div class="form-group">
+          <label class="form-label" for="admin-id-input">아이디</label>
+          <input
+            id="admin-id-input"
+            class="form-input"
+            type="text"
+            placeholder="admin"
+            autocomplete="username"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="admin-password-input">비밀번호</label>
+          <input
+            id="admin-password-input"
+            class="form-input password-input"
+            type="password"
+            placeholder="비밀번호 입력"
+            autocomplete="current-password"
+          />
+        </div>
+        <button
+          class="btn-full btn-primary-login"
+          id="btn-login"
+          onclick="loginAdmin()"
+        >
+          로그인
+        </button>
+        <button
+          class="btn-link-login"
+          id="btn-reset-password"
+          onclick="resetAdminPassword()"
+        >
+          비밀번호 변경
+        </button>
+        <p class="login-help">
+          비밀번호 변경 시 대표자 이메일로 새 비밀번호가 발송됩니다.
+        </p>
+        <div id="login-msg" class="login-msg"></div>
+      </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app">
+      <div class="db-container">
+        <div class="db-overlay" id="db-overlay" onclick="closeSidebar()"></div>
+
+        <!-- SIDEBAR -->
+        <aside class="db-sidebar" id="db-sidebar">
+          <div class="db-sidebar-header">
+            <div class="db-logo">G3 <span>DESIGN</span></div>
+            <div class="db-logo-sub">관리자 대시보드</div>
+          </div>
+          <nav class="db-sidebar-nav">
+            <button
+              class="db-nav-item active"
+              data-page="dashboard"
+              onclick="navigate('dashboard')"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              대시보드
+            </button>
+            <button
+              class="db-nav-item"
+              data-page="leads"
+              onclick="navigate('leads')"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+                <path
+                  d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"
+                />
+              </svg>
+              접수관리
+              <span class="db-nav-badge" id="leads-badge" style="display: none"
+                >0</span
+              >
+            </button>
+            <button
+              class="db-nav-item"
+              data-page="portfolio"
+              onclick="navigate('portfolio')"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+              포트폴리오
+            </button>
+            <button
+              class="db-nav-item"
+              data-page="popups"
+              onclick="navigate('popups')"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+              팝업관리
+            </button>
+            <button
+              class="db-nav-item"
+              data-page="analytics"
+              onclick="navigate('analytics')"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
+              방문자통계
+            </button>
+          </nav>
+          <div class="db-sidebar-footer">
+            <button class="db-nav-item" onclick="doLogout()">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              로그아웃
+            </button>
+          </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="db-main">
+          <header class="db-header">
+            <div class="db-header-left">
+              <button class="db-mobile-menu" onclick="toggleSidebar()">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+              </button>
+              <span
+                style="font-size: 14px; font-weight: 600; color: var(--n700)"
+                id="header-title"
+                >대시보드</span
+              >
+            </div>
+            <div class="db-header-right">
+              <span class="db-user">관리자</span>
+              <button class="db-btn-logout" onclick="doLogout()">
+                로그아웃
+              </button>
+            </div>
+          </header>
+
+          <div class="db-content">
+            <!-- DASHBOARD PAGE -->
+            <section id="page-dashboard" class="page-section active">
+              <h1 class="page-title">대시보드</h1>
+              <p class="page-sub">실시간 현황을 확인하세요</p>
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <div class="stat-icon gold">
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+                      <path
+                        d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="stat-label">총 접수</div>
+                    <div class="stat-value" id="stat-total">-</div>
+                  </div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-icon red">
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="stat-label">신규 접수</div>
+                    <div class="stat-value" id="stat-new">-</div>
+                  </div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-icon green">
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                      <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="stat-label">완료</div>
+                    <div class="stat-value" id="stat-done">-</div>
+                  </div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-icon blue">
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="stat-label">포트폴리오</div>
+                    <div class="stat-value" id="stat-portfolio">-</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-title" id="recent-leads-title"
+                    >최근 접수</span
+                  >
+                  <span class="card-link" onclick="navigate('leads')"
+                    >전체보기 →</span
+                  >
+                </div>
+                <div id="recent-leads-cards" class="recent-leads-cards"></div>
+              </div>
+            </section>
+
+            <!-- LEADS PAGE -->
+            <section id="page-leads" class="page-section">
+              <h1 class="page-title">접수관리</h1>
+              <p class="page-sub">인테리어 상담 접수를 관리하세요</p>
+              <div class="filter-tabs" id="leads-tabs">
+                <button
+                  class="filter-tab active"
+                  data-status=""
+                  onclick="setLeadsFilter('')"
+                >
+                  전체 <span class="tab-count" id="tab-all">0</span>
+                </button>
+                <button
+                  class="filter-tab"
+                  data-status="신규"
+                  onclick="setLeadsFilter('신규')"
+                >
+                  신규
+                  <span
+                    class="tab-count"
+                    id="tab-new"
+                    style="
+                      background: var(--g3-red);
+                      color: white;
+                      padding: 1px 6px;
+                      border-radius: 8px;
+                    "
+                    >0</span
+                  >
+                </button>
+                <button
+                  class="filter-tab"
+                  data-status="상담중"
+                  onclick="setLeadsFilter('상담중')"
+                >
+                  상담중 <span class="tab-count" id="tab-progress">0</span>
+                </button>
+                <button
+                  class="filter-tab"
+                  data-status="완료"
+                  onclick="setLeadsFilter('완료')"
+                >
+                  완료 <span class="tab-count" id="tab-done">0</span>
+                </button>
+              </div>
+              <div class="leads-stats" id="leads-stats">
+                <div class="leads-stat-item">
+                  <span class="leads-stat-num" id="stat-year">0</span>
+                  <span class="leads-stat-label">올해</span>
+                </div>
+                <div class="leads-stat-divider"></div>
+                <div class="leads-stat-item">
+                  <span class="leads-stat-num" id="stat-month">0</span>
+                  <span class="leads-stat-label">이번달</span>
+                </div>
+                <div class="leads-stat-divider"></div>
+                <div class="leads-stat-item">
+                  <span class="leads-stat-num" id="stat-week">0</span>
+                  <span class="leads-stat-label">이번주</span>
+                </div>
+                <div class="leads-stat-divider"></div>
+                <div class="leads-stat-item leads-stat-today">
+                  <span class="leads-stat-num" id="stat-today">0</span>
+                  <span class="leads-stat-label">오늘</span>
+                </div>
+              </div>
+              <div class="card" style="padding: 20px 20px 0">
+                <div class="toolbar">
+                  <div class="search-box">
+                    <input
+                      class="search-input"
+                      id="leads-search"
+                      type="text"
+                      placeholder="이름, 연락처, 종류 검색..."
+                      oninput="filterLeadsTable()"
+                    />
+                  </div>
+                  <button class="btn btn-ghost" onclick="exportLeadsCsv()">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    CSV 다운로드
+                  </button>
+                </div>
+                <div class="table-wrap leads-desktop">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>이름</th>
+                        <th>연락처</th>
+                        <th>인테리어종류</th>
+                        <th>예산</th>
+                        <th>상태</th>
+                        <th>접수일</th>
+                        <th>관리</th>
+                      </tr>
+                    </thead>
+                    <tbody id="leads-tbody">
+                      <tr class="empty-row">
+                        <td colspan="7">데이터를 불러오는 중...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="leads-mobile" id="leads-cards"></div>
+                <div class="pagination">
+                  <button
+                    class="pg-btn"
+                    id="leads-prev"
+                    onclick="leadsPageChange(-1)"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                  </button>
+                  <span class="pg-info" id="leads-page-info">1 / 1 페이지</span>
+                  <button
+                    class="pg-btn"
+                    id="leads-next"
+                    onclick="leadsPageChange(1)"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ANALYTICS PAGE -->
+            <section id="page-analytics" class="page-section">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: flex-start;
+                  margin-bottom: 4px;
+                  flex-wrap: wrap;
+                  gap: 8px;
+                "
+              >
+                <div>
+                  <h1 class="page-title">방문자통계</h1>
+                  <p class="page-sub" style="margin-bottom: 0">
+                    사이트 방문 현황을 분석하세요
+                  </p>
+                </div>
+                <div
+                  id="ga4-health"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    padding: 6px 12px;
+                    background: white;
+                    border: 1px solid var(--n200);
+                    border-radius: 8px;
+                    font-size: 12px;
+                    font-weight: 500;
+                    color: var(--n600);
+                  "
+                >
+                  <span
+                    id="ga4-dot"
+                    style="
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 50%;
+                      background: var(--n300);
+                      flex-shrink: 0;
+                    "
+                  ></span>
+                  <span id="ga4-label">GA4 확인 중...</span>
+                  <span
+                    id="realtime-badge"
+                    style="
+                      display: none;
+                      margin-left: 8px;
+                      background: #dbeafe;
+                      color: #2563eb;
+                      font-size: 11px;
+                      font-weight: 700;
+                      padding: 2px 8px;
+                      border-radius: 10px;
+                    "
+                  ></span>
+                </div>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  gap: 8px;
+                  margin-bottom: 20px;
+                  margin-top: 16px;
+                  flex-wrap: wrap;
+                  align-items: center;
+                "
+              >
+                <button
+                  class="period-btn"
+                  data-period="1"
+                  onclick="setPeriod(1, this)"
+                >
+                  오늘
+                </button>
+                <button
+                  class="period-btn active"
+                  data-period="7"
+                  onclick="setPeriod(7, this)"
+                >
+                  7일
+                </button>
+                <button
+                  class="period-btn"
+                  data-period="14"
+                  onclick="setPeriod(14, this)"
+                >
+                  14일
+                </button>
+                <button
+                  class="period-btn"
+                  data-period="30"
+                  onclick="setPeriod(30, this)"
+                >
+                  30일
+                </button>
+                <button
+                  class="period-btn"
+                  data-period="custom"
+                  onclick="toggleCustomRange(this)"
+                >
+                  사용자 지정
+                </button>
+                <div
+                  id="custom-range"
+                  style="
+                    display: none;
+                    align-items: center;
+                    gap: 6px;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <input
+                    type="date"
+                    id="range-start"
+                    class="field-input"
+                    style="padding: 5px 10px; font-size: 12px; width: auto"
+                  />
+                  <span style="font-size: 12px; color: var(--n500)">~</span>
+                  <input
+                    type="date"
+                    id="range-end"
+                    class="field-input"
+                    style="padding: 5px 10px; font-size: 12px; width: auto"
+                  />
+                  <button
+                    class="period-btn"
+                    style="
+                      background: var(--g3-gold);
+                      border-color: var(--g3-gold);
+                      color: white;
+                    "
+                    onclick="applyCustomRange()"
+                  >
+                    적용
+                  </button>
+                </div>
+              </div>
+              <div class="analytics-grid">
+                <div class="stat-card">
+                  <div class="stat-icon gold">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="stat-label">총 방문자</div>
+                    <div class="stat-value" id="stat-visitors">-</div>
+                  </div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-icon blue">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                      />
+                      <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="stat-label">페이지뷰</div>
+                    <div class="stat-value" id="stat-pageviews">-</div>
+                  </div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-icon green">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="stat-label">평균 체류시간</div>
+                    <div class="stat-value" id="stat-duration">-</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-grid">
+                <div class="card">
+                  <div class="card-header">
+                    <span class="card-title">일별 방문자</span>
+                  </div>
+                  <canvas id="visitors-chart" height="100"></canvas>
+                </div>
+                <div class="card">
+                  <div class="card-header">
+                    <span class="card-title">유입 경로</span>
+                  </div>
+                  <canvas id="source-chart" height="200"></canvas>
+                </div>
+              </div>
+              <div class="analytics-bottom-grid">
+                <div class="card">
+                  <div class="card-header">
+                    <span class="card-title">기기 분포</span>
+                  </div>
+                  <div id="device-dist"></div>
+                </div>
+                <div class="card">
+                  <div class="card-header">
+                    <span class="card-title">인기 페이지</span>
+                  </div>
+                  <ul class="top-pages-list" id="top-pages"></ul>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-title">지역별 방문자</span>
+                </div>
+                <div id="region-list">
+                  <div
+                    style="
+                      text-align: center;
+                      padding: 24px;
+                      color: var(--n400);
+                      font-size: 13px;
+                    "
+                  >
+                    데이터를 불러오는 중...
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- PORTFOLIO PAGE -->
+            <section id="page-portfolio" class="page-section">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 16px;
+                  flex-wrap: wrap;
+                  gap: 10px;
+                "
+              >
+                <div>
+                  <h1 class="page-title">포트폴리오 관리</h1>
+                  <p class="page-sub" style="margin-bottom: 0">
+                    시공 사례를 관리하세요 · <span id="pf-count">-</span>개
+                    프로젝트
+                  </p>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    gap: 8px;
+                    align-items: center;
+                    flex-wrap: wrap;
+                  "
+                >
+                  <select
+                    class="pf-sort-select"
+                    id="pf-sort-select"
+                    onchange="applyPfPresetSort(this.value)"
+                  >
+                    <option value="custom">사용자 지정 순서</option>
+                    <option value="newest">최신 등록순</option>
+                    <option value="oldest">오래된순</option>
+                    <option value="category">카테고리별</option>
+                    <option value="name">이름순 (가나다)</option>
+                  </select>
+                  <button class="btn btn-gold" onclick="openPortfolioModal()">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <line x1="12" y1="5" x2="12" y2="19" />
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    새 프로젝트
+                  </button>
+                </div>
+              </div>
+              <div class="portfolio-grid" id="portfolio-grid">
+                <div class="loading-center"><div class="spinner"></div></div>
+              </div>
+            </section>
+
+            <!-- PORTFOLIO REORDER TOAST -->
+            <div class="pf-toast" id="pf-toast">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#10B981"
+                stroke-width="2.5"
+              >
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              <span id="pf-toast-msg">순서가 변경되었습니다</span>
+              <button class="pf-undo" onclick="pfUndo()">되돌리기</button>
+            </div>
+
+            <!-- POPUPS PAGE -->
+            <section id="page-popups" class="page-section">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 20px;
+                "
+              >
+                <div>
+                  <h1 class="page-title">팝업관리</h1>
+                  <p class="page-sub" style="margin-bottom: 0">
+                    사이트 팝업을 관리하세요
+                  </p>
+                </div>
+                <button class="btn btn-gold" onclick="openPopupModal()">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  팝업 추가
+                </button>
+              </div>
+              <div class="popup-list" id="popup-list">
+                <div class="loading-center"><div class="spinner"></div></div>
+              </div>
+            </section>
+          </div>
+          <!-- /db-content -->
+        </main>
+      </div>
+      <!-- /db-container -->
+
+      <!-- BOTTOM NAV (mobile) -->
+      <nav class="db-bottom-nav">
+        <ul class="db-bottom-list">
+          <li class="db-bottom-item">
+            <span
+              class="db-bottom-link active"
+              data-page="dashboard"
+              onclick="navigate('dashboard')"
+              ><svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" /></svg
+              >대시보드</span
+            >
+          </li>
+          <li class="db-bottom-item">
+            <span
+              class="db-bottom-link"
+              data-page="leads"
+              onclick="navigate('leads')"
+              ><svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+                <path
+                  d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"
+                /></svg
+              >접수</span
+            >
+          </li>
+          <li class="db-bottom-item">
+            <span
+              class="db-bottom-link"
+              data-page="portfolio"
+              onclick="navigate('portfolio')"
+              ><svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" /></svg
+              >포트폴리오</span
+            >
+          </li>
+          <li class="db-bottom-item">
+            <span
+              class="db-bottom-link"
+              data-page="analytics"
+              onclick="navigate('analytics')"
+              ><svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" /></svg
+              >통계</span
+            >
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <!-- /app -->
+
+    <!-- LEAD DETAIL MODAL -->
+    <div
+      id="lead-modal"
+      class="modal-overlay"
+      style="display: none"
+      onclick="if (event.target === this) closeLeadModal();"
+    >
+      <div class="modal modal-lg" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <span class="modal-title">접수 상세</span>
+          <button class="modal-close" onclick="closeLeadModal()">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-grid" id="lead-detail-grid"></div>
+          <div style="margin-top: 18px">
+            <div class="field-group">
+              <label class="field-label">메모</label>
+              <textarea
+                class="field-textarea"
+                id="lead-memo"
+                rows="3"
+                placeholder="내부 메모를 입력하세요..."
+              ></textarea>
+            </div>
+          </div>
+          <div id="lead-photos" style="margin-top: 14px; display: none">
+            <div class="field-label" style="margin-bottom: 8px">첨부 사진</div>
+            <div class="photo-grid" id="lead-photos-grid"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeLeadModal()">닫기</button>
+          <button class="btn btn-gold" onclick="saveLeadMemo()">
+            메모 저장
+          </button>
+          <button class="btn btn-red" id="lead-call-btn" onclick="callLead()">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 12 19.79 19.79 0 0 1 1.97 3.4 2 2 0 0 1 3.97 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"
+              />
+            </svg>
+            전화걸기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PORTFOLIO MODAL -->
+    <div
+      id="portfolio-modal"
+      class="modal-overlay"
+      style="display: none"
+      onclick="if (event.target === this) closePortfolioModal();"
+    >
+      <div class="modal modal-lg" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <span class="modal-title" id="portfolio-modal-title"
+            >새 프로젝트 추가</span
+          >
+          <button class="modal-close" onclick="closePortfolioModal()">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="pf-id" />
+          <div class="form-row">
+            <div class="field-group">
+              <label class="field-label">프로젝트 제목 *</label>
+              <input
+                class="field-input"
+                id="pf-title"
+                type="text"
+                placeholder="예: 강남구 카페 인테리어"
+              />
+            </div>
+            <div class="field-group">
+              <label class="field-label">카테고리 *</label>
+              <select class="field-select" id="pf-category">
+                <option value="">선택하세요</option>
+                <option value="cafe">카페</option>
+                <option value="restaurant">식당</option>
+                <option value="office">사무실</option>
+                <option value="store">매장</option>
+                <option value="medical">미용실/의원</option>
+                <option value="residential">주거</option>
+                <option value="commercial">상업공간</option>
+                <option value="exterior">외부리모델링</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row single" style="margin-bottom: 14px">
+            <div class="field-group">
+              <label class="field-label">설명</label>
+              <textarea
+                class="field-textarea"
+                id="pf-desc"
+                placeholder="프로젝트 설명을 입력하세요..."
+              ></textarea>
+            </div>
+          </div>
+          <div style="margin-bottom: 14px">
+            <div class="field-label" style="margin-bottom: 6px">
+              썸네일 이미지
+            </div>
+            <div
+              class="dropzone"
+              id="pf-thumb-zone"
+              ondragover="
+                event.preventDefault();
+                this.classList.add('drag-over');
+              "
+              ondragleave="this.classList.remove('drag-over')"
+              ondrop="handleDrop(event, 'pf-thumb-input')"
+              onclick="document.getElementById('pf-thumb-input').click()"
+            >
+              <div class="dz-icon">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+              </div>
+              <p>클릭하거나 이미지를 드래그하세요</p>
+              <p style="font-size: 11px; color: var(--n400); margin-top: 4px">
+                JPG, PNG, WebP (최대 5MB)
+              </p>
+            </div>
+            <input
+              type="file"
+              id="pf-thumb-input"
+              accept="image/*"
+              style="display: none"
+              onchange="previewThumb(this)"
+            />
+            <div
+              id="pf-thumb-preview"
+              style="display: none; margin-top: 8px"
+            ></div>
+          </div>
+          <div>
+            <div class="field-label" style="margin-bottom: 6px">
+              상세 이미지 (다중)
+            </div>
+            <div
+              class="dropzone"
+              id="pf-images-zone"
+              ondragover="
+                event.preventDefault();
+                this.classList.add('drag-over');
+              "
+              ondragleave="this.classList.remove('drag-over')"
+              ondrop="handleDrop(event, 'pf-images-input')"
+              onclick="document.getElementById('pf-images-input').click()"
+            >
+              <div class="dz-icon">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </div>
+              <p>여러 이미지를 업로드하세요</p>
+              <p style="font-size: 11px; color: var(--n400); margin-top: 4px">
+                최대 20장
+              </p>
+            </div>
+            <input
+              type="file"
+              id="pf-images-input"
+              accept="image/*"
+              multiple
+              style="display: none"
+              onchange="previewImages(this)"
+            />
+            <div
+              id="pf-images-preview"
+              class="photo-grid"
+              style="margin-top: 8px"
+            ></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closePortfolioModal()">
+            취소
+          </button>
+          <button class="btn btn-gold" onclick="savePortfolio()">저장</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- POPUP MODAL -->
+    <div
+      id="popup-modal"
+      class="modal-overlay"
+      style="display: none"
+      onclick="if (event.target === this) closePopupModal();"
+    >
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <span class="modal-title" id="popup-modal-title">팝업 추가</span>
+          <button class="modal-close" onclick="closePopupModal()">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="pp-id" />
+          <div class="form-row single" style="margin-bottom: 14px">
+            <div class="field-group">
+              <label class="field-label">팝업 제목 *</label>
+              <input
+                class="field-input"
+                id="pp-title"
+                type="text"
+                placeholder="팝업 제목을 입력하세요"
+              />
+            </div>
+          </div>
+          <div class="form-row single" style="margin-bottom: 14px">
+            <div class="field-group">
+              <label class="field-label">링크 URL</label>
+              <input
+                class="field-input"
+                id="pp-link"
+                type="url"
+                placeholder="https://..."
+              />
+            </div>
+          </div>
+          <div class="form-row" style="margin-bottom: 14px">
+            <div class="field-group">
+              <label class="field-label">노출 시작일</label>
+              <input class="field-input" id="pp-start" type="date" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">노출 종료일</label>
+              <input class="field-input" id="pp-end" type="date" />
+            </div>
+          </div>
+          <div style="margin-bottom: 14px">
+            <div class="field-label" style="margin-bottom: 6px">
+              팝업 이미지
+            </div>
+            <div
+              class="dropzone"
+              onclick="document.getElementById('pp-img-input').click()"
+              ondragover="
+                event.preventDefault();
+                this.classList.add('drag-over');
+              "
+              ondragleave="this.classList.remove('drag-over')"
+              ondrop="handleDrop(event, 'pp-img-input')"
+            >
+              <div class="dz-icon">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+              </div>
+              <p>팝업에 사용할 이미지를 업로드하세요</p>
+            </div>
+            <input
+              type="file"
+              id="pp-img-input"
+              accept="image/*"
+              style="display: none"
+              onchange="previewPopupImg(this)"
+            />
+            <div
+              id="pp-img-preview"
+              style="display: none; margin-top: 8px"
+            ></div>
+          </div>
+          <div class="toggle-wrap">
+            <button
+              class="toggle"
+              id="pp-active-toggle"
+              onclick="togglePopupActive()"
+              title="활성화"
+            ></button>
+            <span class="toggle-label" id="pp-active-label">비활성화</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closePopupModal()">
+            취소
+          </button>
+          <button class="btn btn-gold" onclick="savePopup()">저장</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGE LIGHTBOX -->
+    <div
+      id="lightbox"
+      style="
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 300;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        flex-direction: column;
+        gap: 16px;
+      "
+      onclick="this.style.display = 'none'"
+    >
+      <img
+        id="lightbox-img"
+        style="
+          max-width: 100%;
+          max-height: 80vh;
+          border-radius: 8px;
+          object-fit: contain;
+        "
+      />
+      <a
+        id="lightbox-download"
+        href="#"
+        download="photo.webp"
+        onclick="event.stopPropagation()"
+        style="
+          background: var(--g3-gold);
+          color: #fff;
+          text-decoration: none;
+          font-size: 13px;
+          font-weight: 600;
+          padding: 10px 24px;
+          border-radius: 6px;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+        "
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        다운로드
+      </a>
+    </div>
+
+    <script>
+      // ============================================================
+      // API HELPER
+      // ============================================================
+      function handleApiResponse(r) {
+        if (r.status === 401) {
+          doLogout(true);
+          throw new Error("401");
+        }
+        return r.json();
+      }
+
+      const API = {
+        token: () => sessionStorage.getItem("adminToken"),
+        headers: () => ({
+          Authorization: `Bearer ${API.token()}`,
+          "Content-Type": "application/json",
+        }),
+        get: (url) =>
+          fetch(url, { headers: API.headers() }).then(handleApiResponse),
+        post: (url, data) =>
+          fetch(url, {
+            method: "POST",
+            headers: API.headers(),
+            body: JSON.stringify(data),
+          }).then(handleApiResponse),
+        patch: (url, data) =>
+          fetch(url, {
+            method: "PATCH",
+            headers: API.headers(),
+            body: JSON.stringify(data),
+          }).then(handleApiResponse),
+        put: (url, data) =>
+          fetch(url, {
+            method: "PUT",
+            headers: API.headers(),
+            body: JSON.stringify(data),
+          }).then(handleApiResponse),
+        del: (url) =>
+          fetch(url, { method: "DELETE", headers: API.headers() }).then(
+            handleApiResponse,
+          ),
+        upload: (url, formData) =>
+          fetch(url, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${API.token()}` },
+            body: formData,
+          }).then(handleApiResponse),
+      };
+
+      // ============================================================
+      // AUTH
+      // ============================================================
+      let resetCooldown = false;
+
+      function setLoginMessage(text, type) {
+        const msg = document.getElementById("login-msg");
+        msg.textContent = text || "";
+        msg.className = type ? `login-msg ${type}` : "login-msg";
+      }
+
+      async function loginAdmin() {
+        const username = document.getElementById("admin-id-input").value.trim();
+        const password = document.getElementById("admin-password-input").value;
+        const btn = document.getElementById("btn-login");
+        if (!username || !password) {
+          setLoginMessage("아이디와 비밀번호를 입력해주세요.", "error");
+          return;
+        }
+        btn.disabled = true;
+        setLoginMessage("로그인 확인 중...");
+        try {
+          const res = await fetch("/api/admin-auth", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "login", username, password }),
+          });
+          const data = await res.json();
+          if (res.ok && data.token) {
+            sessionStorage.setItem("adminToken", data.token);
+            showApp();
+          } else {
+            setLoginMessage(
+              data.error || data.message || "로그인에 실패했습니다.",
+              "error",
+            );
+          }
+        } catch (e) {
+          setLoginMessage("네트워크 오류가 발생했습니다.", "error");
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      async function resetAdminPassword() {
+        if (resetCooldown) return;
+        if (
+          !confirm(
+            "새 비밀번호를 대표자 이메일로 발송하고 기존 비밀번호를 무효화합니다. 진행할까요?",
+          )
+        ) {
+          return;
+        }
+        const btn = document.getElementById("btn-reset-password");
+        resetCooldown = true;
+        btn.disabled = true;
+        setLoginMessage("새 비밀번호를 생성하고 메일을 발송 중...");
+        try {
+          const res = await fetch("/api/admin-auth", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "reset-password" }),
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            sessionStorage.removeItem("adminToken");
+            document.getElementById("admin-password-input").value = "";
+            setLoginMessage(
+              data.message || "대표자 이메일로 새 비밀번호를 발송했습니다.",
+              "success",
+            );
+          } else {
+            setLoginMessage(
+              data.error || data.message || "비밀번호 변경에 실패했습니다.",
+              "error",
+            );
+          }
+        } catch (e) {
+          setLoginMessage("네트워크 오류가 발생했습니다.", "error");
+        } finally {
+          let sec = 60;
+          const originalText = "비밀번호 변경";
+          const timer = setInterval(() => {
+            btn.textContent = `비밀번호 변경 (${sec}s)`;
+            sec--;
+            if (sec < 0) {
+              clearInterval(timer);
+              btn.disabled = false;
+              btn.textContent = originalText;
+              resetCooldown = false;
+            }
+          }, 1000);
+        }
+      }
+
+      document
+        .getElementById("admin-password-input")
+        .addEventListener("keydown", (e) => {
+          if (e.key === "Enter") loginAdmin();
+        });
+      document
+        .getElementById("admin-id-input")
+        .addEventListener("keydown", (e) => {
+          if (e.key === "Enter") loginAdmin();
+        });
+
+      function showApp() {
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("app").style.display = "block";
+        const savedPage = location.hash.replace("#", "");
+        const validPages = [
+          "dashboard",
+          "leads",
+          "portfolio",
+          "popups",
+          "analytics",
+        ];
+        navigate(validPages.includes(savedPage) ? savedPage : "dashboard");
+      }
+
+      function doLogout(force = false) {
+        if (!force && !confirm("로그아웃 하시겠습니까?")) return;
+        sessionStorage.removeItem("adminToken");
+        document.getElementById("app").style.display = "none";
+        document.getElementById("login-screen").style.display = "flex";
+        document.getElementById("admin-password-input").value = "";
+        setLoginMessage("");
+      }
+
+      // Auto-login only after the server accepts the signed session token.
+      window.addEventListener("DOMContentLoaded", async () => {
+        const token = sessionStorage.getItem("adminToken");
+        if (!token) return;
+        try {
+          const res = await fetch("/api/admin-auth", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ action: "verify-token" }),
+          });
+          if (res.ok) showApp();
+          else sessionStorage.removeItem("adminToken");
+        } catch {
+          sessionStorage.removeItem("adminToken");
+        }
+      });
+
+      // ============================================================
+      // NAVIGATION
+      // ============================================================
+      const PAGE_TITLES = {
+        dashboard: "대시보드",
+        leads: "접수관리",
+        analytics: "방문자통계",
+        portfolio: "포트폴리오",
+        popups: "팝업관리",
+      };
+
+      function navigate(page) {
+        // Remember last page
+        location.hash = page;
+
+        // Hide all pages
+        document
+          .querySelectorAll(".page-section")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById("page-" + page).classList.add("active");
+
+        // Update sidebar
+        document.querySelectorAll(".db-nav-item[data-page]").forEach((el) => {
+          el.classList.toggle("active", el.dataset.page === page);
+        });
+
+        // Update bottom nav
+        document
+          .querySelectorAll(".db-bottom-link[data-page]")
+          .forEach((el) => {
+            el.classList.toggle("active", el.dataset.page === page);
+          });
+
+        // Update header title
+        document.getElementById("header-title").textContent =
+          PAGE_TITLES[page] || page;
+
+        closeSidebar();
+
+        // Load page data
+        if (page === "dashboard") loadDashboard();
+        else if (page === "leads") loadLeads();
+        else if (page === "analytics") {
+          startRealtimePolling();
+          loadAnalytics(7);
+        } else if (page === "portfolio") loadPortfolio();
+        else if (page === "popups") loadPopups();
+      }
+
+      function toggleSidebar() {
+        const s = document.getElementById("db-sidebar");
+        const o = document.getElementById("db-overlay");
+        s.classList.toggle("open");
+        o.classList.toggle("open");
+      }
+      function closeSidebar() {
+        document.getElementById("db-sidebar").classList.remove("open");
+        document.getElementById("db-overlay").classList.remove("open");
+      }
+
+      // ============================================================
+      // DASHBOARD
+      // ============================================================
+      async function loadDashboard() {
+        try {
+          const [leadsData, portfolioData] = await Promise.allSettled([
+            API.get("/api/leads"),
+            API.get("/api/portfolio"),
+          ]);
+          const extractArray = (val) => {
+            if (!val) return [];
+            if (Array.isArray(val)) return val;
+            if (Array.isArray(val.records)) return val.records;
+            if (Array.isArray(val.leads)) return val.leads;
+            if (Array.isArray(val.items)) return val.items;
+            if (Array.isArray(val.data)) return val.data;
+            return [];
+          };
+          const leads =
+            leadsData.status === "fulfilled"
+              ? extractArray(leadsData.value)
+              : [];
+          const portfolio =
+            portfolioData.status === "fulfilled"
+              ? extractArray(portfolioData.value)
+              : [];
+
+          const total = leads.length;
+          const isNew = (s) => !s || s === "신규" || s === "new";
+          const isDone = (s) => s === "완료" || s === "done";
+          const newCount = leads.filter((l) => isNew(l.status)).length;
+          const done = leads.filter((l) => isDone(l.status)).length;
+
+          document.getElementById("stat-total").textContent = total;
+          document.getElementById("stat-new").textContent = newCount;
+          document.getElementById("stat-done").textContent = done;
+          document.getElementById("stat-portfolio").textContent =
+            portfolio.length;
+
+          // Badge
+          if (newCount > 0) {
+            const badge = document.getElementById("leads-badge");
+            badge.textContent = newCount;
+            badge.style.display = "";
+          }
+
+          // Recent leads - card style
+          const recentEl = document.getElementById("recent-leads-cards");
+          const recent = leads.slice(0, 5);
+          document.getElementById("recent-leads-title").textContent =
+            `최근 접수 ${recent.length}건`;
+          if (recent.length === 0) {
+            recentEl.innerHTML =
+              '<div style="text-align:center;padding:32px;color:var(--n400)">접수 내역이 없습니다.</div>';
+          } else {
+            recentEl.innerHTML = recent
+              .map((l) => {
+                const st = l.status || "신규";
+                const badgeCls =
+                  st === "신규" || st === "new"
+                    ? "s-new"
+                    : st === "상담중"
+                      ? "s-progress"
+                      : "s-done";
+                const displaySt = st === "new" ? "신규" : st;
+                return `
+        <div class="lead-card" onclick="navigate('leads')" style="cursor:pointer">
+          <div class="lead-card-header">
+            <span class="lead-card-name">${l.name || "-"}</span>
+            <span class="status-select ${badgeCls}" style="pointer-events:none;font-size:11px;padding:3px 10px;border-radius:20px">${displaySt}</span>
+          </div>
+          <div class="lead-card-body">
+            <div><div class="lead-card-label">연락처</div>${l.phone || "-"}</div>
+            <div><div class="lead-card-label">종류</div>${l.interiorType || l.type || l.category || "-"}</div>
+            <div><div class="lead-card-label">접수일</div>${fmtDate(l.createdAt || l.date)}</div>
+          </div>
+        </div>`;
+              })
+              .join("");
+          }
+        } catch (e) {
+          console.error("Dashboard load error:", e);
+        }
+      }
+
+      // ============================================================
+      // LEADS
+      // ============================================================
+      let allLeads = [];
+      let leadsFiltered = [];
+      let leadsPage = 1;
+      const LEADS_PAGE_SIZE = 10;
+      let leadsStatusFilter = "";
+      let currentLead = null;
+
+      async function loadLeads() {
+        document.getElementById("leads-tbody").innerHTML =
+          '<tr class="empty-row"><td colspan="7">데이터를 불러오는 중...</td></tr>';
+        try {
+          const data = await API.get("/api/leads");
+          allLeads =
+            data.records ||
+            data.leads ||
+            data.items ||
+            (Array.isArray(data) ? data : []);
+          updateLeadsCounts();
+          applyLeadsFilter();
+        } catch (e) {
+          document.getElementById("leads-tbody").innerHTML =
+            '<tr class="empty-row"><td colspan="7">데이터를 불러오지 못했습니다.</td></tr>';
+        }
+      }
+
+      function ns(s) {
+        if (!s || s === "new" || s === "신규") return "신규";
+        if (s === "consulting" || s === "상담중") return "상담중";
+        if (s === "done" || s === "완료") return "완료";
+        return s;
+      }
+
+      function parseLeadDate(str) {
+        if (!str) return null;
+        // "2026. 3. 22. 오전 10:58:57" or "2026-03-22" or ISO
+        const m = str.match(/(\d{4})[.\-/]\s*(\d{1,2})[.\-/]\s*(\d{1,2})/);
+        if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+        const d = new Date(str);
+        return isNaN(d) ? null : d;
+      }
+
+      function updateLeadsCounts() {
+        allLeads.forEach((l) => {
+          l._status = ns(l.status);
+        });
+        const all = allLeads.length;
+        const newC = allLeads.filter((l) => l._status === "신규").length;
+        const prog = allLeads.filter((l) => l._status === "상담중").length;
+        const done = allLeads.filter((l) => l._status === "완료").length;
+        document.getElementById("tab-all").textContent = all;
+        document.getElementById("tab-new").textContent = newC;
+        document.getElementById("tab-progress").textContent = prog;
+        document.getElementById("tab-done").textContent = done;
+
+        // Period stats
+        const now = new Date();
+        const yearStart = new Date(now.getFullYear(), 0, 1);
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        const day = now.getDay();
+        const weekStart = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() - (day === 0 ? 6 : day - 1),
+        );
+        const todayStart = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+        );
+
+        let year = 0,
+          month = 0,
+          week = 0,
+          today = 0;
+        allLeads.forEach((l) => {
+          const d = parseLeadDate(l.createdAt || l.date);
+          if (!d) return;
+          if (d >= yearStart) year++;
+          if (d >= monthStart) month++;
+          if (d >= weekStart) week++;
+          if (d >= todayStart) today++;
+        });
+        document.getElementById("stat-year").textContent = year;
+        document.getElementById("stat-month").textContent = month;
+        document.getElementById("stat-week").textContent = week;
+        document.getElementById("stat-today").textContent = today;
+      }
+
+      function setLeadsFilter(status) {
+        leadsStatusFilter = status;
+        leadsPage = 1;
+        document
+          .querySelectorAll(".filter-tab")
+          .forEach((t) =>
+            t.classList.toggle("active", t.dataset.status === status),
+          );
+        applyLeadsFilter();
+      }
+
+      function filterLeadsTable() {
+        leadsPage = 1;
+        applyLeadsFilter();
+      }
+
+      function applyLeadsFilter() {
+        const q = (
+          document.getElementById("leads-search").value || ""
+        ).toLowerCase();
+        leadsFiltered = allLeads.filter((l) => {
+          const matchStatus =
+            !leadsStatusFilter || (l.status || "신규") === leadsStatusFilter;
+          const matchQ =
+            !q ||
+            (l.name || "").toLowerCase().includes(q) ||
+            (l.phone || "").includes(q) ||
+            (l.interiorType || l.type || "").toLowerCase().includes(q);
+          return matchStatus && matchQ;
+        });
+        renderLeadsTable();
+      }
+
+      function renderLeadsTable() {
+        const tbody = document.getElementById("leads-tbody");
+        const total = leadsFiltered.length;
+        const totalPages = Math.max(1, Math.ceil(total / LEADS_PAGE_SIZE));
+        leadsPage = Math.min(leadsPage, totalPages);
+        const slice = leadsFiltered.slice(
+          (leadsPage - 1) * LEADS_PAGE_SIZE,
+          leadsPage * LEADS_PAGE_SIZE,
+        );
+
+        document.getElementById("leads-page-info").textContent =
+          `${leadsPage} / ${totalPages} 페이지 (총 ${total}건)`;
+        document.getElementById("leads-prev").disabled = leadsPage <= 1;
+        document.getElementById("leads-next").disabled =
+          leadsPage >= totalPages;
+
+        const cards = document.getElementById("leads-cards");
+        if (slice.length === 0) {
+          tbody.innerHTML =
+            '<tr class="empty-row"><td colspan="7">접수 내역이 없습니다.</td></tr>';
+          if (cards)
+            cards.innerHTML =
+              '<div style="text-align:center;padding:40px;color:var(--n400)">접수 내역이 없습니다.</div>';
+          return;
+        }
+        tbody.innerHTML = slice
+          .map(
+            (l) => `
+    <tr onclick="openLeadModal('${l.id}')">
+      <td>${l.name || "-"}</td>
+      <td><a href="tel:${l.phone}" onclick="event.stopPropagation()">${l.phone || "-"}</a></td>
+      <td>${l.interiorType || l.type || l.category || "-"}</td>
+      <td>${l.budget || l.amount || "-"}</td>
+      <td onclick="event.stopPropagation()">${statusSelect(l)}</td>
+      <td>${fmtDate(l.createdAt || l.date)}</td>
+      <td onclick="event.stopPropagation()" style="display:flex;gap:4px;align-items:center">
+        <button class="btn-icon" title="상세보기" onclick="openLeadModal('${l.id}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+        <button class="btn-icon btn-icon-danger" title="삭제" onclick="deleteLead('${l.id}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </td>
+    </tr>`,
+          )
+          .join("");
+
+        // Mobile cards
+        if (cards) {
+          cards.innerHTML = slice
+            .map((l) => {
+              const st = l.status || "신규";
+              const badgeCls =
+                st === "신규"
+                  ? "s-new"
+                  : st === "상담중"
+                    ? "s-progress"
+                    : "s-done";
+              return `
+    <div class="lead-card" onclick="openLeadModal('${l.id}')">
+      <div class="lead-card-header">
+        <span class="lead-card-name">${l.name || "-"}</span>
+        <span class="status-select ${badgeCls}" style="pointer-events:none;font-size:11px;padding:3px 10px;border-radius:20px">${st}</span>
+      </div>
+      <div class="lead-card-body">
+        <div>
+          <div class="lead-card-label">연락처</div>
+          <a href="tel:${l.phone}" onclick="event.stopPropagation()" style="color:var(--g3-gold);text-decoration:none;font-weight:500">${l.phone || "-"}</a>
+        </div>
+        <div>
+          <div class="lead-card-label">인테리어종류</div>
+          ${l.interiorType || l.type || l.category || "-"}
+        </div>
+        <div>
+          <div class="lead-card-label">예산</div>
+          ${l.budget || l.amount || "-"}
+        </div>
+        <div>
+          <div class="lead-card-label">접수일</div>
+          ${fmtDate(l.createdAt || l.date)}
+        </div>
+      </div>
+      <div class="lead-card-footer">
+        <div onclick="event.stopPropagation()">${statusSelect(l)}</div>
+        <div class="lead-card-actions" onclick="event.stopPropagation()" style="display:flex;gap:6px;align-items:center">
+          <button class="btn-icon" title="상세보기" onclick="openLeadModal('${l.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="btn-icon btn-icon-danger" title="삭제" onclick="deleteLead('${l.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>`;
+            })
+            .join("");
+        }
+      }
+
+      function leadsPageChange(dir) {
+        leadsPage += dir;
+        renderLeadsTable();
+      }
+
+      function statusSelect(l) {
+        const st = l.status || "신규";
+        const cls =
+          st === "신규"
+            ? "s-new"
+            : st === "상담중"
+              ? "s-progress"
+              : st === "완료"
+                ? "s-done"
+                : "s-new";
+        return `<select class="status-select ${cls}" onchange="changeLeadStatus('${l.id}', this)" onclick="event.stopPropagation()">
+    <option ${st === "신규" ? "selected" : ""}>신규</option>
+    <option ${st === "상담중" ? "selected" : ""}>상담중</option>
+    <option ${st === "완료" ? "selected" : ""}>완료</option>
+  </select>`;
+      }
+
+      async function changeLeadStatus(id, sel) {
+        const status = sel.value;
+        sel.className = `status-select ${status === "신규" ? "s-new" : status === "상담중" ? "s-progress" : "s-done"}`;
+        const idx = allLeads.findIndex((l) => l.id == id);
+        if (idx > -1) allLeads[idx].status = status;
+        updateLeadsCounts();
+        try {
+          await API.patch("/api/leads", { id, status });
+        } catch (e) {
+          console.error("Status update failed", e);
+        }
+      }
+
+      async function deleteLead(id) {
+        if (!confirm("이 접수건을 삭제하시겠습니까?")) return;
+        try {
+          await API.del(`/api/leads?id=${id}`);
+          allLeads = allLeads.filter((l) => l.id != id);
+          updateLeadsCounts();
+          applyLeadsFilter();
+        } catch (e) {
+          alert("삭제에 실패했습니다.");
+        }
+      }
+
+      function openLeadModal(id) {
+        const lead = allLeads.find((l) => l.id == id);
+        if (!lead) return;
+        currentLead = lead;
+        const grid = document.getElementById("lead-detail-grid");
+        const fields = [
+          ["접수일시", fmtDate(lead.createdAt || lead.date, true)],
+          ["이름", lead.name || "-"],
+          ["연락처", lead.phone || "-"],
+          ["이메일", lead.email || "-"],
+          [
+            "인테리어 종류",
+            lead.interiorType || lead.type || lead.category || "-",
+          ],
+          ["예산", lead.budget || lead.amount || "-"],
+          ["주소", lead.address || lead.region || "-"],
+          ["상태", statusSelect(lead)],
+          ["상담 내용", lead.message || lead.content || "-", true],
+        ];
+        grid.innerHTML = fields
+          .map(
+            ([label, val, full]) =>
+              `<div class="detail-item${full ? " full" : ""}"><label>${label}</label>${full ? `<p>${val}</p>` : `<span>${val}</span>`}</div>`,
+          )
+          .join("");
+        document.getElementById("lead-memo").value = lead.memo || "";
+        document
+          .getElementById("lead-call-btn")
+          .setAttribute("data-phone", lead.phone || "");
+
+        // Photos
+        const photos = lead.photos || lead.images || [];
+        const photosEl = document.getElementById("lead-photos");
+        if (photos.length > 0) {
+          photosEl.style.display = "";
+          document.getElementById("lead-photos-grid").innerHTML = photos
+            .map(
+              (url, i) =>
+                `<div class="photo-thumb" onclick="openLightbox('${url}')"><img src="${url}" alt="첨부사진" loading="lazy"><div class="photo-actions" onclick="event.stopPropagation()"><a href="${url}" target="_blank" rel="noopener">확대</a><a href="${url}" download="photo_${i + 1}.webp">저장</a></div></div>`,
+            )
+            .join("");
+        } else {
+          photosEl.style.display = "none";
+        }
+
+        document.getElementById("lead-modal").style.display = "flex";
+      }
+
+      function closeLeadModal() {
+        document.getElementById("lead-modal").style.display = "none";
+        currentLead = null;
+      }
+
+      async function saveLeadMemo() {
+        if (!currentLead) return;
+        const memo = document.getElementById("lead-memo").value;
+        try {
+          await API.patch("/api/leads", { id: currentLead.id, memo });
+          const idx = allLeads.findIndex((l) => l.id == currentLead.id);
+          if (idx > -1) allLeads[idx].memo = memo;
+          currentLead.memo = memo;
+          showToast("메모가 저장되었습니다.");
+        } catch (e) {
+          showToast("저장에 실패했습니다.", true);
+        }
+      }
+
+      function callLead() {
+        const phone = document
+          .getElementById("lead-call-btn")
+          .getAttribute("data-phone");
+        if (phone) window.location.href = `tel:${phone}`;
+      }
+
+      function exportLeadsCsv() {
+        if (leadsFiltered.length === 0) {
+          alert("내보낼 데이터가 없습니다.");
+          return;
+        }
+        const headers = [
+          "이름",
+          "연락처",
+          "이메일",
+          "인테리어종류",
+          "예산",
+          "상태",
+          "접수일",
+        ];
+        const rows = leadsFiltered.map((l) => [
+          l.name || "",
+          l.phone || "",
+          l.email || "",
+          l.interiorType || l.type || "",
+          l.budget || l.amount || "",
+          l.status || "신규",
+          fmtDate(l.createdAt || l.date),
+        ]);
+        const csv =
+          "\uFEFF" +
+          [headers, ...rows]
+            .map((r) =>
+              r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","),
+            )
+            .join("\n");
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(
+          new Blob([csv], { type: "text/csv;charset=utf-8;" }),
+        );
+        a.download = `접수내역_${new Date().toISOString().split("T")[0]}.csv`;
+        a.click();
+      }
+
+      // ============================================================
+      // ANALYTICS
+      // ============================================================
+      let visitorsChart = null,
+        sourceChart = null;
+      let currentPeriod = 7;
+
+      function setPeriod(days, btn) {
+        document
+          .querySelectorAll(".period-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        // Hide custom range unless custom button
+        if (days !== "custom") {
+          document.getElementById("custom-range").style.display = "none";
+        }
+        currentPeriod = days;
+        if (days !== "custom") loadAnalytics(days);
+      }
+
+      function toggleCustomRange(btn) {
+        document
+          .querySelectorAll(".period-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const el = document.getElementById("custom-range");
+        el.style.display = el.style.display === "none" ? "flex" : "none";
+      }
+
+      function applyCustomRange() {
+        const start = document.getElementById("range-start").value;
+        const end = document.getElementById("range-end").value;
+        if (!start || !end) {
+          showToast("시작일과 종료일을 모두 선택하세요.", true);
+          return;
+        }
+        if (start > end) {
+          showToast("시작일이 종료일보다 늦습니다.", true);
+          return;
+        }
+        loadAnalytics(null, start, end);
+      }
+
+      let realtimeInterval = null;
+
+      async function checkGA4Health() {
+        const dot = document.getElementById("ga4-dot");
+        const label = document.getElementById("ga4-label");
+        const badge = document.getElementById("realtime-badge");
+        try {
+          const data = await API.get("/api/analytics?realtime=true");
+          if (data && data.connected) {
+            dot.style.background = "#22c55e";
+            label.textContent = "GA4 연결됨";
+            badge.style.display = "";
+            badge.textContent = `실시간 ${data.activeUsers || 0}명`;
+          } else {
+            dot.style.background = "#ef4444";
+            label.textContent = "GA4 미연결";
+            badge.style.display = "none";
+          }
+        } catch (e) {
+          dot.style.background = "#ef4444";
+          label.textContent = "GA4 미연결";
+        }
+      }
+
+      function startRealtimePolling() {
+        if (realtimeInterval) clearInterval(realtimeInterval);
+        checkGA4Health();
+        realtimeInterval = setInterval(checkGA4Health, 30000);
+      }
+
+      async function loadAnalytics(period, startDate, endDate) {
+        document.getElementById("stat-visitors").textContent = "-";
+        document.getElementById("stat-pageviews").textContent = "-";
+        document.getElementById("stat-duration").textContent = "-";
+        document.getElementById("region-list").innerHTML =
+          '<div style="text-align:center;padding:24px;color:var(--n400);font-size:13px">데이터를 불러오는 중...</div>';
+
+        let url;
+        if (startDate && endDate) {
+          url = `/api/analytics?startDate=${startDate}&endDate=${endDate}`;
+        } else {
+          url = `/api/analytics?period=${period}`;
+        }
+
+        try {
+          const data = await API.get(url);
+          const totals = data.totals || {};
+          document.getElementById("stat-visitors").textContent = fmtNum(
+            totals.users || data.totalVisitors || 0,
+          );
+          document.getElementById("stat-pageviews").textContent = fmtNum(
+            totals.pageViews || data.totalPageviews || 0,
+          );
+          const dur = totals.avgDuration || 0;
+          document.getElementById("stat-duration").textContent = dur
+            ? `${Math.floor(dur / 60)}:${String(Math.round(dur % 60)).padStart(2, "0")}`
+            : "0:00";
+
+          renderVisitorsChart(data.daily || []);
+
+          // Sources: array [{source, sessions}] → object {source: percent}
+          const srcArr = data.sources || [];
+          const srcTotal =
+            srcArr.reduce((s, r) => s + (r.sessions || 0), 0) || 1;
+          const srcObj = {};
+          srcArr.forEach((r) => {
+            srcObj[r.source] = Math.round((r.sessions / srcTotal) * 100);
+          });
+          renderSourceChart(
+            Object.keys(srcObj).length ? srcObj : { "데이터 없음": 100 },
+          );
+
+          // Devices: array [{device, users}] → object {device: percent}
+          const devArr = data.devices || [];
+          const devTotal = devArr.reduce((s, r) => s + (r.users || 0), 0) || 1;
+          const devObj = {};
+          devArr.forEach((r) => {
+            devObj[r.device] = Math.round((r.users / devTotal) * 100);
+          });
+          renderDevices(Object.keys(devObj).length ? devObj : {});
+
+          renderTopPages(data.pages || []);
+          renderRegions(data.regions || []);
+        } catch (e) {
+          renderVisitorsChart([]);
+          renderSourceChart({});
+          renderDevices({});
+          renderTopPages([]);
+          renderRegions([]);
+          document.getElementById("stat-visitors").textContent = "-";
+          document.getElementById("stat-pageviews").textContent = "-";
+          document.getElementById("stat-duration").textContent = "-";
+        }
+      }
+
+      function renderRegions(regions) {
+        const el = document.getElementById("region-list");
+        if (!regions || regions.length === 0) {
+          el.innerHTML =
+            '<div style="text-align:center;padding:24px;color:var(--n400);font-size:13px">지역 데이터가 없습니다.</div>';
+          return;
+        }
+        const maxVal = Math.max(
+          ...regions.map((r) => r.users || r.count || r.visitors || 0),
+          1,
+        );
+        el.innerHTML = regions
+          .slice(0, 10)
+          .map((r) => {
+            const val = r.users || r.count || r.visitors || 0;
+            const pct = Math.round((val / maxVal) * 100);
+            return `
+          <div class="device-row">
+            <span style="font-size:13px;color:var(--n700);min-width:120px;flex-shrink:0;white-space:nowrap">${r.region || r.name || "-"}</span>
+            <div class="device-bar-wrap"><div class="device-bar" style="width:${pct}%;background:var(--g3-gold)"></div></div>
+            <span style="font-size:12px;color:var(--n500);width:48px;text-align:right;flex-shrink:0">${fmtNum(val)}</span>
+          </div>`;
+          })
+          .join("");
+      }
+
+      function renderVisitorsChart(daily) {
+        const ctx = document.getElementById("visitors-chart").getContext("2d");
+        if (visitorsChart) visitorsChart.destroy();
+        visitorsChart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: daily.map((d) => d.date.slice(5)),
+            datasets: [
+              {
+                label: "방문자",
+                data: daily.map((d) => d.count || d.visitors || 0),
+                borderColor: "#A17D4A",
+                backgroundColor: "rgba(161,125,74,0.08)",
+                tension: 0.4,
+                fill: true,
+                pointBackgroundColor: "#A17D4A",
+                pointRadius: 3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: "#f3f4f6" },
+                ticks: { font: { size: 11 } },
+              },
+              x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+            },
+          },
+        });
+      }
+
+      function renderSourceChart(sources) {
+        const ctx = document.getElementById("source-chart").getContext("2d");
+        if (sourceChart) sourceChart.destroy();
+        sourceChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: Object.keys(sources),
+            datasets: [
+              {
+                data: Object.values(sources),
+                backgroundColor: ["#A17D4A", "#B94A2C", "#6b7280", "#d1d5db"],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { font: { size: 11 }, padding: 12 },
+              },
+            },
+          },
+        });
+      }
+
+      function renderDevices(devices) {
+        const colors = ["#A17D4A", "#B94A2C", "#6b7280"];
+        const total = Object.values(devices).reduce((a, b) => a + b, 0);
+        document.getElementById("device-dist").innerHTML = Object.entries(
+          devices,
+        )
+          .map(
+            ([name, val], i) => `
+    <div class="device-row">
+      <span style="font-size:13px;color:var(--n700);width:60px">${name}</span>
+      <div class="device-bar-wrap"><div class="device-bar" style="width:${val}%;background:${colors[i] || "#ccc"}"></div></div>
+      <span style="font-size:12px;color:var(--n500);width:36px;text-align:right">${val}%</span>
+    </div>`,
+          )
+          .join("");
+      }
+
+      function renderTopPages(pages) {
+        document.getElementById("top-pages").innerHTML = pages
+          .map(
+            (p) => `
+    <li><span class="page-path">${p.path}</span><span class="page-views">${fmtNum(p.views)}</span></li>`,
+          )
+          .join("");
+      }
+
+      // ============================================================
+      // PORTFOLIO
+      // ============================================================
+      let allPortfolio = [];
+      let pfThumbFile = null,
+        pfImgFiles = [];
+      let editingPortfolioId = null;
+      let pfOrderHistory = []; // undo stack
+      let pfDragIdx = null;
+      let pfSaveTimer = null;
+
+      async function loadPortfolio() {
+        document.getElementById("portfolio-grid").innerHTML =
+          '<div class="loading-center"><div class="spinner"></div></div>';
+        try {
+          const data = await API.get("/api/portfolio");
+          allPortfolio = data.items || data || [];
+          renderPortfolioGrid();
+        } catch (e) {
+          document.getElementById("portfolio-grid").innerHTML =
+            '<div style="text-align:center;padding:40px;color:var(--n400)">데이터를 불러오지 못했습니다.</div>';
+        }
+      }
+
+      function renderPortfolioGrid() {
+        const grid = document.getElementById("portfolio-grid");
+        document.getElementById("pf-count").textContent = allPortfolio.length;
+        if (allPortfolio.length === 0) {
+          grid.innerHTML =
+            '<div style="text-align:center;padding:48px;color:var(--n400);grid-column:1/-1">포트폴리오가 없습니다. 새 프로젝트를 추가하세요.</div>';
+          return;
+        }
+        grid.innerHTML = allPortfolio
+          .map(
+            (p, i) => `
+          <div class="portfolio-card" draggable="true" data-pf-idx="${i}" data-pf-id="${p.id}" style="cursor:pointer" onclick="editPortfolio('${p.id}')">
+            <div class="pf-drag-handle" onmousedown="event.stopPropagation()" title="드래그하여 순서 변경">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="9" cy="10" r="1.5"/><circle cx="15" cy="10" r="1.5"/><circle cx="9" cy="15" r="1.5"/><circle cx="15" cy="15" r="1.5"/><circle cx="9" cy="20" r="1.5"/><circle cx="15" cy="20" r="1.5"/></svg>
+            </div>
+            <div class="pf-order-badge" data-pf-idx="${i}" title="클릭하여 순번 변경" onclick="event.stopPropagation();pfStartEditOrder(this,${i})">
+              ${i + 1}
+            </div>
+            <div class="portfolio-thumb">
+              ${p.img ? `<img src="${p.img}" alt="${p.title || ""}" loading="lazy">` : '<div class="no-img">이미지 없음</div>'}
+            </div>
+            <div class="portfolio-info">
+              <div class="portfolio-cat">${p.cat || "-"}</div>
+              <div class="portfolio-name">${p.title || "-"}</div>
+              <div class="portfolio-actions">
+                <button class="btn btn-ghost" style="flex:1;padding:5px 8px;font-size:11px" onclick="event.stopPropagation();editPortfolio('${p.id}')">수정</button>
+                <button class="btn-icon btn-icon-danger" title="삭제" onclick="event.stopPropagation();deletePortfolio('${p.id}')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>`,
+          )
+          .join("");
+        pfSetupDragDrop();
+      }
+
+      // ── ORDER BADGE CLICK → EDIT ──
+      function pfStartEditOrder(badge, fromIdx) {
+        badge.classList.add("editing");
+        badge.innerHTML =
+          '<input type="number" value="' +
+          (fromIdx + 1) +
+          '" min="1" max="' +
+          allPortfolio.length +
+          '" onfocus="this.select()" onblur="pfCommitOrder(this,' +
+          fromIdx +
+          ")\" onkeydown=\"if(event.key==='Enter')this.blur();if(event.key==='Escape'){this.dataset.cancel='1';this.blur();}\">";
+        badge.querySelector("input").focus();
+      }
+
+      function pfCommitOrder(input, fromIdx) {
+        if (input.dataset.cancel) return renderPortfolioGrid();
+        const toIdx = Math.max(
+          0,
+          Math.min(allPortfolio.length - 1, parseInt(input.value, 10) - 1),
+        );
+        if (isNaN(toIdx) || toIdx === fromIdx) return renderPortfolioGrid();
+        pfOrderHistory.push(allPortfolio.map((p) => p.id));
+        const [moved] = allPortfolio.splice(fromIdx, 1);
+        allPortfolio.splice(toIdx, 0, moved);
+        renderPortfolioGrid();
+        setTimeout(() => {
+          const card = document.querySelector('[data-pf-idx="' + toIdx + '"]');
+          if (card) card.classList.add("pf-move-flash");
+        }, 50);
+        pfShowToast(fromIdx + 1 + "번 → " + (toIdx + 1) + "번 이동");
+        document.getElementById("pf-sort-select").value = "custom";
+        pfDebounceSaveOrder();
+      }
+
+      // ── DRAG & DROP ──
+      function pfSetupDragDrop() {
+        const grid = document.getElementById("portfolio-grid");
+        const cards = grid.querySelectorAll(".portfolio-card");
+        cards.forEach((card) => {
+          card.addEventListener("dragstart", (e) => {
+            pfDragIdx = parseInt(card.dataset.pfIdx);
+            card.classList.add("pf-dragging");
+            e.dataTransfer.effectAllowed = "move";
+            setTimeout(() => {
+              card.style.visibility = "hidden";
+            }, 0);
+          });
+          card.addEventListener("dragend", () => {
+            card.classList.remove("pf-dragging");
+            card.style.visibility = "";
+            pfClearDropIndicators();
+            pfDragIdx = null;
+          });
+          card.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            if (pfDragIdx === null) return;
+            const tIdx = parseInt(card.dataset.pfIdx);
+            if (tIdx === pfDragIdx) return;
+            pfClearDropIndicators();
+            const rect = card.getBoundingClientRect();
+            if (e.clientX < rect.left + rect.width / 2) {
+              card.classList.add("pf-drag-over-left");
+            } else {
+              card.classList.add("pf-drag-over-right");
+            }
+          });
+          card.addEventListener("dragleave", () => {
+            card.classList.remove("pf-drag-over-left", "pf-drag-over-right");
+          });
+          card.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const tIdx = parseInt(card.dataset.pfIdx);
+            if (pfDragIdx === null || tIdx === pfDragIdx) return;
+            pfOrderHistory.push(allPortfolio.map((p) => p.id));
+            const rect = card.getBoundingClientRect();
+            const insertAfter = e.clientX >= rect.left + rect.width / 2;
+            const [moved] = allPortfolio.splice(pfDragIdx, 1);
+            let finalTo =
+              pfDragIdx < tIdx
+                ? insertAfter
+                  ? tIdx
+                  : tIdx - 1
+                : insertAfter
+                  ? tIdx + 1
+                  : tIdx;
+            finalTo = Math.max(0, Math.min(allPortfolio.length, finalTo));
+            allPortfolio.splice(finalTo, 0, moved);
+            renderPortfolioGrid();
+            setTimeout(() => {
+              const c = document.querySelector(
+                '[data-pf-idx="' + finalTo + '"]',
+              );
+              if (c) c.classList.add("pf-move-flash");
+            }, 50);
+            pfShowToast("드래그 이동 완료");
+            document.getElementById("pf-sort-select").value = "custom";
+            pfDebounceSaveOrder();
+          });
+        });
+      }
+
+      function pfClearDropIndicators() {
+        document
+          .querySelectorAll(".pf-drag-over-left,.pf-drag-over-right")
+          .forEach((c) => {
+            c.classList.remove("pf-drag-over-left", "pf-drag-over-right");
+          });
+      }
+
+      // ── PRESET SORT ──
+      function applyPfPresetSort(mode) {
+        if (mode === "custom") return;
+        pfOrderHistory.push(allPortfolio.map((p) => p.id));
+        const catOrder = { 카페: 0, 음식점: 1, 사무실: 2, 기타: 9 };
+        switch (mode) {
+          case "newest":
+            allPortfolio.sort(
+              (a, b) => (b.sortOrder || 0) - (a.sortOrder || 0),
+            );
+            break;
+          case "oldest":
+            allPortfolio.sort(
+              (a, b) => (a.sortOrder || 0) - (b.sortOrder || 0),
+            );
+            break;
+          case "category":
+            allPortfolio.sort(
+              (a, b) => (catOrder[a.cat] ?? 9) - (catOrder[b.cat] ?? 9),
+            );
+            break;
+          case "name":
+            allPortfolio.sort((a, b) =>
+              (a.title || "").localeCompare(b.title || "", "ko"),
+            );
+            break;
+        }
+        renderPortfolioGrid();
+        pfShowToast(
+          {
+            newest: "최신순",
+            oldest: "오래된순",
+            category: "카테고리별",
+            name: "이름순",
+          }[mode] + " 정렬 적용",
+        );
+        pfDebounceSaveOrder();
+      }
+
+      // ── SAVE ORDER (debounced) ──
+      function pfDebounceSaveOrder() {
+        clearTimeout(pfSaveTimer);
+        pfSaveTimer = setTimeout(pfSaveOrder, 1000);
+      }
+
+      async function pfSaveOrder() {
+        const total = allPortfolio.length;
+        const orders = allPortfolio.map((p, i) => ({
+          id: p.id,
+          sortOrder: total - i, // DESC: first item gets highest number
+        }));
+        try {
+          await API.put("/api/portfolio", { orders });
+          // Update local sortOrder
+          allPortfolio.forEach((p, i) => {
+            p.sortOrder = total - i;
+          });
+        } catch (e) {
+          pfShowToast("순서 저장 실패", true);
+        }
+      }
+
+      // ── UNDO ──
+      function pfUndo() {
+        if (pfOrderHistory.length === 0) return;
+        const prevIds = pfOrderHistory.pop();
+        const idMap = {};
+        allPortfolio.forEach((p) => {
+          idMap[p.id] = p;
+        });
+        allPortfolio = prevIds.map((id) => idMap[id]).filter(Boolean);
+        renderPortfolioGrid();
+        pfHideToast();
+        pfDebounceSaveOrder();
+      }
+
+      // ── TOAST ──
+      let pfToastTimer;
+      function pfShowToast(msg) {
+        const t = document.getElementById("pf-toast");
+        document.getElementById("pf-toast-msg").textContent = msg;
+        t.classList.add("show");
+        clearTimeout(pfToastTimer);
+        pfToastTimer = setTimeout(() => t.classList.remove("show"), 4000);
+      }
+      function pfHideToast() {
+        document.getElementById("pf-toast").classList.remove("show");
+      }
+
+      function openPortfolioModal(id) {
+        editingPortfolioId = null;
+        pfThumbFile = null;
+        pfImgFiles = [];
+        document.getElementById("pf-id").value = "";
+        document.getElementById("pf-title").value = "";
+        document.getElementById("pf-category").value = "";
+        document.getElementById("pf-desc").value = "";
+        document.getElementById("pf-thumb-preview").style.display = "none";
+        document.getElementById("pf-images-preview").innerHTML = "";
+        document.getElementById("portfolio-modal-title").textContent =
+          "새 프로젝트 추가";
+        document.getElementById("portfolio-modal").style.display = "flex";
+      }
+
+      function editPortfolio(id) {
+        const p = allPortfolio.find((x) => x.id === id);
+        if (!p) return;
+        editingPortfolioId = id;
+        document.getElementById("pf-id").value = id;
+        document.getElementById("pf-title").value = p.title || "";
+        document.getElementById("pf-category").value = p.cat || "";
+        document.getElementById("pf-desc").value = "";
+        document.getElementById("portfolio-modal-title").textContent =
+          "프로젝트 수정";
+        const tp = document.getElementById("pf-thumb-preview");
+        if (p.img) {
+          tp.style.display = "";
+          tp.innerHTML = `<img src="${p.img}" style="width:100%;max-height:140px;object-fit:cover;border-radius:8px">`;
+        } else {
+          tp.style.display = "none";
+        }
+        const imgs = p.images || [];
+        document.getElementById("pf-images-preview").innerHTML = imgs
+          .map(
+            (url) =>
+              `<div class="photo-thumb"><img src="${url}" loading="lazy"></div>`,
+          )
+          .join("");
+        document.getElementById("portfolio-modal").style.display = "flex";
+      }
+
+      async function deletePortfolio(id) {
+        if (!confirm("이 포트폴리오를 삭제하시겠습니까?")) return;
+        try {
+          await API.del("/api/portfolio?id=" + id);
+          allPortfolio = allPortfolio.filter((p) => p.id !== id);
+          renderPortfolioGrid();
+          showToast("삭제되었습니다.");
+        } catch (e) {
+          showToast("삭제에 실패했습니다.", true);
+        }
+      }
+
+      function closePortfolioModal() {
+        document.getElementById("portfolio-modal").style.display = "none";
+      }
+
+      // Compress image to WebP, max 1200px wide, targeting 30-100KB via binary search
+      async function compressImageWebP(file) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+              const MAX_W = 1200;
+              let w = img.naturalWidth;
+              let h = img.naturalHeight;
+              if (w > MAX_W) {
+                h = Math.round((h * MAX_W) / w);
+                w = MAX_W;
+              }
+              const canvas = document.createElement("canvas");
+              canvas.width = w;
+              canvas.height = h;
+              canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+
+              const TARGET_MIN = 30 * 1024;
+              const TARGET_MAX = 100 * 1024;
+              let lo = 0.1,
+                hi = 0.92,
+                mid = 0.75;
+              let bestBlob = null;
+              let iter = 0;
+              const tryQuality = () => {
+                canvas.toBlob(
+                  (blob) => {
+                    if (!blob) {
+                      resolve(file);
+                      return;
+                    }
+                    iter++;
+                    if (blob.size >= TARGET_MIN && blob.size <= TARGET_MAX) {
+                      resolve(
+                        new File(
+                          [blob],
+                          file.name.replace(/\.[^.]+$/, ".webp"),
+                          { type: "image/webp" },
+                        ),
+                      );
+                      return;
+                    }
+                    if (iter >= 8) {
+                      resolve(
+                        new File(
+                          [bestBlob || blob],
+                          file.name.replace(/\.[^.]+$/, ".webp"),
+                          { type: "image/webp" },
+                        ),
+                      );
+                      return;
+                    }
+                    if (blob.size < TARGET_MIN) {
+                      bestBlob = blob;
+                      lo = mid;
+                    } else {
+                      hi = mid;
+                    }
+                    mid = (lo + hi) / 2;
+                    tryQuality();
+                  },
+                  "image/webp",
+                  mid,
+                );
+              };
+              tryQuality();
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function previewThumb(input) {
+        const raw = input.files[0];
+        if (!raw) return;
+        compressImageWebP(raw).then((compressed) => {
+          pfThumbFile = compressed;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const tp = document.getElementById("pf-thumb-preview");
+            tp.style.display = "";
+            tp.innerHTML = `<img src="${e.target.result}" style="width:100%;max-height:140px;object-fit:cover;border-radius:8px">`;
+          };
+          reader.readAsDataURL(pfThumbFile);
+        });
+      }
+
+      function previewImages(input) {
+        const rawFiles = Array.from(input.files);
+        const preview = document.getElementById("pf-images-preview");
+        preview.innerHTML = "";
+        pfImgFiles = [];
+        rawFiles.forEach((raw) => {
+          compressImageWebP(raw).then((compressed) => {
+            pfImgFiles.push(compressed);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const div = document.createElement("div");
+              div.className = "photo-thumb";
+              div.innerHTML = `<img src="${e.target.result}">`;
+              preview.appendChild(div);
+            };
+            reader.readAsDataURL(compressed);
+          });
+        });
+      }
+
+      function handleDrop(e, inputId) {
+        e.preventDefault();
+        const input = document.getElementById(inputId);
+        const dt = e.dataTransfer;
+        if (dt.files.length) {
+          input.files = dt.files;
+          input.dispatchEvent(new Event("change"));
+        }
+        e.currentTarget.classList.remove("drag-over");
+      }
+
+      async function fileToBase64(file) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function uploadToR2(file, key) {
+        const compressed = await compressImageWebP(file);
+        const base64 = await fileToBase64(compressed);
+        const res = await API.post("/api/upload", {
+          base64,
+          key,
+          contentType: "image/webp",
+        });
+        return res.url;
+      }
+
+      async function savePortfolio() {
+        const title = document.getElementById("pf-title").value.trim();
+        const category = document.getElementById("pf-category").value;
+        const desc = document.getElementById("pf-desc").value.trim();
+        const id = document.getElementById("pf-id").value;
+        if (!title) {
+          showToast("프로젝트 제목을 입력하세요.", true);
+          return;
+        }
+        if (!category) {
+          showToast("카테고리를 선택하세요.", true);
+          return;
+        }
+
+        // Capture files before closing modal
+        const savedThumb = pfThumbFile;
+        const savedImgs = [...pfImgFiles];
+
+        // Immediately close and show success
+        closePortfolioModal();
+        showToast(id ? "수정되었습니다." : "추가되었습니다.");
+
+        // Save metadata first (no images), then upload images in background
+        try {
+          const payload = { title, category, description: desc };
+          let recordId = id;
+
+          if (id) {
+            payload.id = id;
+            await API.patch("/api/portfolio", payload);
+          } else {
+            const res = await API.post("/api/portfolio", payload);
+            recordId = res.id;
+          }
+          loadPortfolio();
+
+          // Background: compress + upload images
+          if (recordId && (savedThumb || savedImgs.length)) {
+            (async () => {
+              try {
+                const imgPayload = { id: recordId };
+                if (savedThumb) {
+                  const compressed = await compressImageWebP(savedThumb);
+                  imgPayload.thumbBase64 = await fileToBase64(compressed);
+                }
+                if (savedImgs.length) {
+                  imgPayload.imageBase64s = [];
+                  for (const f of savedImgs) {
+                    const compressed = await compressImageWebP(f);
+                    imgPayload.imageBase64s.push(
+                      await fileToBase64(compressed),
+                    );
+                  }
+                }
+                await API.patch("/api/portfolio", imgPayload);
+                showToast("이미지 업로드 완료");
+                loadPortfolio();
+              } catch (e) {
+                showToast("이미지 업로드 실패", true);
+              }
+            })();
+          }
+        } catch (e) {
+          showToast("저장에 실패했습니다: " + (e.message || ""), true);
+        }
+      }
+
+      // ============================================================
+      // POPUPS
+      // ============================================================
+      let allPopups = [];
+      let ppImgFile = null;
+      let editingPopupId = null;
+      let ppActive = false;
+
+      async function loadPopups() {
+        document.getElementById("popup-list").innerHTML =
+          '<div class="loading-center"><div class="spinner"></div></div>';
+        try {
+          const data = await API.get("/api/popups");
+          if (Array.isArray(data)) {
+            allPopups = data;
+          } else if (data && Array.isArray(data.items)) {
+            allPopups = data.items;
+          } else if (data && Array.isArray(data.popups)) {
+            allPopups = data.popups;
+          } else if (data && Array.isArray(data.data)) {
+            allPopups = data.data;
+          } else {
+            allPopups = [];
+          }
+          renderPopupList();
+        } catch (e) {
+          document.getElementById("popup-list").innerHTML =
+            '<div style="text-align:center;padding:40px;color:var(--n400)">데이터를 불러오지 못했습니다.</div>';
+        }
+      }
+
+      function renderPopupList() {
+        const list = document.getElementById("popup-list");
+        if (allPopups.length === 0) {
+          list.innerHTML =
+            '<div style="text-align:center;padding:40px;color:var(--n400)">등록된 팝업이 없습니다.</div>';
+          return;
+        }
+        list.innerHTML = allPopups
+          .map(
+            (p) => `
+    <div class="popup-item">
+      <div class="popup-preview">
+        ${p.image ? `<img src="${p.image}" alt="${p.title}">` : ""}
+      </div>
+      <div class="popup-info">
+        <div class="popup-title">${p.title || "-"}</div>
+        <div class="popup-meta">
+          ${p.startDate ? `${p.startDate} ~ ${p.endDate || ""}` : "기간 미설정"}
+          ${p.link ? ` · <a href="${p.link}" target="_blank" rel="noopener" style="color:var(--g3-gold)" onclick="event.stopPropagation()">링크</a>` : ""}
+        </div>
+      </div>
+      <div class="popup-actions">
+        <div class="toggle-wrap">
+          <button class="toggle ${p.active ? "on" : ""}" onclick="togglePopupListItem('${p.id}', this)"></button>
+          <span class="toggle-label" style="white-space:nowrap">${p.active ? "활성" : "비활성"}</span>
+        </div>
+        <button class="btn-icon" title="수정" onclick="editPopup('${p.id}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="btn-icon btn-icon-danger" title="삭제" onclick="deletePopup('${p.id}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+    </div>`,
+          )
+          .join("");
+      }
+
+      async function togglePopupListItem(id, btn) {
+        const p = allPopups.find((x) => x.id == id);
+        if (!p) return;
+        p.active = !p.active;
+        btn.classList.toggle("on", p.active);
+        btn.nextElementSibling.textContent = p.active ? "활성" : "비활성";
+        try {
+          await API.patch("/api/popups", { id, active: p.active });
+        } catch (e) {}
+      }
+
+      function openPopupModal() {
+        editingPopupId = null;
+        ppImgFile = null;
+        ppActive = false;
+        document.getElementById("pp-id").value = "";
+        document.getElementById("pp-title").value = "";
+        document.getElementById("pp-link").value = "";
+        document.getElementById("pp-start").value = "";
+        document.getElementById("pp-end").value = "";
+        document.getElementById("pp-img-preview").style.display = "none";
+        document.getElementById("pp-active-toggle").className = "toggle";
+        document.getElementById("pp-active-label").textContent = "비활성화";
+        document.getElementById("popup-modal-title").textContent = "팝업 추가";
+        document.getElementById("popup-modal").style.display = "flex";
+      }
+
+      function editPopup(id) {
+        const p = allPopups.find((x) => x.id == id);
+        if (!p) return;
+        editingPopupId = id;
+        ppActive = !!p.active;
+        document.getElementById("pp-id").value = id;
+        document.getElementById("pp-title").value = p.title || "";
+        document.getElementById("pp-link").value = p.link || "";
+        document.getElementById("pp-start").value = p.startDate || "";
+        document.getElementById("pp-end").value = p.endDate || "";
+        document.getElementById("popup-modal-title").textContent = "팝업 수정";
+        const toggle = document.getElementById("pp-active-toggle");
+        toggle.className = `toggle ${ppActive ? "on" : ""}`;
+        document.getElementById("pp-active-label").textContent = ppActive
+          ? "활성화"
+          : "비활성화";
+        const prev = document.getElementById("pp-img-preview");
+        if (p.image) {
+          prev.style.display = "";
+          prev.innerHTML = `<img src="${p.image}" style="height:80px;border-radius:8px;object-fit:cover">`;
+        } else {
+          prev.style.display = "none";
+        }
+        document.getElementById("popup-modal").style.display = "flex";
+      }
+
+      async function deletePopup(id) {
+        if (!confirm("이 팝업을 삭제하시겠습니까?")) return;
+        try {
+          await API.del(`/api/popups?id=${id}`);
+          allPopups = allPopups.filter((p) => p.id != id);
+          renderPopupList();
+          showToast("삭제되었습니다.");
+        } catch (e) {
+          showToast("삭제에 실패했습니다.", true);
+        }
+      }
+
+      function closePopupModal() {
+        document.getElementById("popup-modal").style.display = "none";
+      }
+
+      function togglePopupActive() {
+        ppActive = !ppActive;
+        const btn = document.getElementById("pp-active-toggle");
+        btn.className = `toggle ${ppActive ? "on" : ""}`;
+        document.getElementById("pp-active-label").textContent = ppActive
+          ? "활성화"
+          : "비활성화";
+      }
+
+      function previewPopupImg(input) {
+        ppImgFile = input.files[0];
+        if (!ppImgFile) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const prev = document.getElementById("pp-img-preview");
+          prev.style.display = "";
+          prev.innerHTML = `<img src="${e.target.result}" style="height:80px;border-radius:8px;object-fit:cover">`;
+        };
+        reader.readAsDataURL(ppImgFile);
+      }
+
+      async function savePopup() {
+        const title = document.getElementById("pp-title").value.trim();
+        const link = document.getElementById("pp-link").value.trim();
+        const startDate = document.getElementById("pp-start").value;
+        const endDate = document.getElementById("pp-end").value;
+        const id = document.getElementById("pp-id").value;
+        if (!title) {
+          showToast("팝업 제목을 입력하세요.", true);
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("link", link);
+        formData.append("startDate", startDate);
+        formData.append("endDate", endDate);
+        formData.append("active", ppActive);
+        if (id) formData.append("id", id);
+        // 포트폴리오 업로드와 같은 기준으로 줄여서 올린다 (최대 1200px · WebP · 30~100KB).
+        // 여기만 원본을 그대로 보내고 있어서 팝업 이미지가 몇 MB 로 올라가던 자리다.
+        if (ppImgFile) {
+          const compressed = await compressImageWebP(ppImgFile);
+          formData.append("image", compressed);
+        }
+
+        try {
+          await API.upload(
+            id ? "/api/popups?method=PATCH" : "/api/popups",
+            formData,
+          );
+          showToast(id ? "수정되었습니다." : "추가되었습니다.");
+          closePopupModal();
+          loadPopups();
+        } catch (e) {
+          showToast("저장에 실패했습니다.", true);
+        }
+      }
+
+      // ============================================================
+      // UTILITIES
+      // ============================================================
+      function fmtDate(str, full) {
+        if (!str) return "-";
+        try {
+          const d = new Date(str);
+          if (isNaN(d)) return String(str).split("T")[0];
+          if (full)
+            return d.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
+          return d.toISOString().split("T")[0];
+        } catch {
+          return String(str);
+        }
+      }
+
+      function fmtNum(n) {
+        return Number(n).toLocaleString("ko-KR");
+      }
+
+      function statusBadge(status) {
+        const cls =
+          status === "신규"
+            ? "badge-new"
+            : status === "상담중"
+              ? "badge-progress"
+              : status === "완료"
+                ? "badge-done"
+                : "badge-new";
+        return `<span class="badge ${cls}">${status}</span>`;
+      }
+
+      function openLightbox(src) {
+        const lb = document.getElementById("lightbox");
+        document.getElementById("lightbox-img").src = src;
+        var dl = document.getElementById("lightbox-download");
+        dl.href = src;
+        dl.download = src.split("/").pop() || "photo.webp";
+        lb.style.display = "flex";
+      }
+
+      // TOAST
+      let toastTimer;
+      function showToast(msg, isError) {
+        let toast = document.getElementById("toast");
+        if (!toast) {
+          toast = document.createElement("div");
+          toast.id = "toast";
+          toast.style.cssText =
+            "position:fixed;bottom:100px;left:50%;transform:translateX(-50%);padding:12px 20px;border-radius:8px;font-size:13px;font-weight:500;z-index:999;transition:opacity 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.15)";
+          document.body.appendChild(toast);
+        }
+        toast.textContent = msg;
+        toast.style.background = isError ? "#B94A2C" : "#1a1a1a";
+        toast.style.color = "white";
+        toast.style.opacity = "1";
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.style.opacity = "0";
+        }, 2500);
+      }
+    </script>
+  </body>
+</html>

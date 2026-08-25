@@ -1602,21 +1602,50 @@
         document.getElementById('lbCounter').textContent = (lbIndex+1) + ' / ' + lbImages.length;
       }
 
-      function openDetail(item) {
-        const imgs = (item.images && item.images.length) ? item.images : (function() {
-          const idx = String(parseInt(item.img.match(/\/(\d+)\.jpg/)?.[1] || '0'));
-          return detailData[idx] || [item.img];
-        })();
+      // 목록 응답에는 상세 이미지 주소가 실려 있지 않다(응답을 281KB 에서 30KB 로
+      // 줄이려고 뺐다). 모달을 열 때 id 로 따로 받고, 받은 것은 항목에 담아 둬서
+      // 같은 항목을 다시 열면 재요청하지 않는다.
+      async function loadDetailImages(item) {
+        if (item.images && item.images.length) return item.images;
+        try {
+          const r = await fetch('/api/portfolio?id=' + encodeURIComponent(item.id));
+          if (r.ok) {
+            const d = await r.json();
+            const imgs = (d.item && d.item.images) || [];
+            if (imgs.length) { item.images = imgs; return imgs; }
+          }
+        } catch (e) {}
+        // API 가 막혀도 최소한 그리드는 채운다
+        const idx = String(parseInt((item.img || '').match(/\/(\d+)\.(?:webp|jpe?g)/)?.[1] || '0'));
+        return detailData[idx] || [item.img];
+      }
+
+      function renderDetailGrid(item, imgs) {
         lbImages = imgs;
-        document.getElementById('detailTitle').textContent = item.title;
-        document.getElementById('detailCat').textContent = item.cat;
         const g = document.getElementById('detailGrid');
         g.innerHTML = '';
         imgs.forEach((src, i) => {
           const img = document.createElement('img');
-          img.src = src; img.alt = item.title; img.loading = 'lazy';
+          img.src = src; img.alt = item.title;
+          // 앞 3장은 모달을 열자마자 보이는 자리라 즉시 받고, 나머지는 스크롤할 때 받는다
+          if (i < 3) { img.decoding = 'async'; img.setAttribute('fetchpriority', 'high'); }
+          else { img.loading = 'lazy'; img.decoding = 'async'; }
           img.addEventListener('click', () => openLb(i));
           g.appendChild(img);
+        });
+      }
+
+      function openDetail(item) {
+        document.getElementById('detailTitle').textContent = item.title;
+        document.getElementById('detailCat').textContent = item.cat;
+        const g = document.getElementById('detailGrid');
+        // 이미지를 받는 동안 모달을 먼저 띄운다. 클릭에 바로 반응해야 하기 때문이다
+        g.innerHTML = '<div class="dm-loading">사진을 불러오는 중…</div>';
+        lbImages = [];
+        loadDetailImages(item).then((imgs) => {
+          // 그 사이 모달을 닫았거나 다른 항목으로 넘어갔으면 그리지 않는다
+          if (document.getElementById('detailTitle').textContent !== item.title) return;
+          renderDetailGrid(item, imgs);
         });
         document.getElementById('detailModal').classList.add('open');
         document.body.style.overflow = 'hidden';
@@ -1746,6 +1775,7 @@
       .dm-close{font-size:22px;color:#999;cursor:pointer;padding:2px 6px;line-height:1}
       .dm-close:hover{color:#1a1a1a}
       .dm-grid{columns:2;column-gap:4px;padding:8px 16px 20px}
+      .dm-loading{column-span:all;padding:60px 0;text-align:center;color:#999;font-size:14px}
       .dm-grid img{width:100%;height:auto;display:block;margin-bottom:4px;break-inside:avoid;border-radius:3px;cursor:pointer}
       .lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;align-items:center;justify-content:center}
       .lb-overlay.open{display:flex}

@@ -84,17 +84,72 @@ function mapRow(r) {
   };
 }
 
+// 목록에 상세 이미지 주소까지 실으면 응답이 281KB 까지 불어난다. 목록 화면은
+// 썸네일만 쓰므로 필요한 칸만 골라 읽고, 상세 이미지는 모달을 열 때 id 로 따로 받는다.
+const LIST_COLUMNS =
+  "id, title, category, subcategory, thumbnail, sortOrder, visible";
+
+function mapListRow(r) {
+  return {
+    id: r.id,
+    title: r.title || "",
+    cat: r.category || "",
+    subcategory: r.subcategory || "",
+    img: r.thumbnail || "",
+    sortOrder: r.sortOrder || 0,
+    visible: !!r.visible,
+  };
+}
+
 module.exports = async (req, res) => {
   // GET without auth (public portfolio list)
   if (req.method === "GET") {
     const adminMode = verifyAdminToken(req);
     try {
-      const where = adminMode ? "" : "WHERE visible=1";
-      const rows = await d1Rows(
-        `SELECT * FROM portfolio ${where} ORDER BY sortOrder DESC`,
+      // 관리자 화면은 항상 최신을 봐야 하므로 캐시하지 않는다. 공개 목록은 엣지에서
+      // 5분간 재사용하고, 그 뒤 하루 동안은 낡은 응답을 먼저 돌려주면서 뒤에서 갱신한다.
+      res.setHeader(
+        "Cache-Control",
+        adminMode
+          ? "private, no-store"
+          : "public, s-maxage=300, stale-while-revalidate=86400",
       );
-      const items = rows.map(mapRow);
-      return res.json({ items, total: items.length });
+
+      const { id, page, limit } = req.query || {};
+
+      // 단건 상세 — 모달을 열 때 이 경로로 이미지 목록을 받는다
+      if (id) {
+        const rows = await d1Rows(
+          `SELECT * FROM portfolio WHERE id=?${adminMode ? "" : " AND visible=1"}`,
+          [id],
+        );
+        if (!rows.length) return res.status(404).json({ error: "없는 항목" });
+        return res.json({ item: mapRow(rows[0]) });
+      }
+
+      const where = adminMode ? "" : "WHERE visible=1";
+      const countRows = await d1Rows(
+        `SELECT COUNT(*) AS n FROM portfolio ${where}`,
+      );
+      const total = countRows[0]?.n || 0;
+
+      // page 를 주지 않으면 지금까지처럼 전체를 돌려준다. 기존 화면을 깨지 않으면서
+      // 필요할 때만 나눠 받게 하려는 것이다.
+      // 관리자 화면은 편집을 위해 이미지 목록까지 필요하므로 모든 칸을 그대로 준다.
+      let sql = `SELECT ${adminMode ? "*" : LIST_COLUMNS} FROM portfolio ${where} ORDER BY sortOrder DESC`;
+      const params = [];
+      let pageInfo = null;
+      if (page) {
+        const per = Math.min(Math.max(parseInt(limit, 10) || 24, 1), 100);
+        const cur = Math.max(parseInt(page, 10) || 1, 1);
+        sql += " LIMIT ? OFFSET ?";
+        params.push(per, (cur - 1) * per);
+        pageInfo = { page: cur, limit: per, totalPages: Math.ceil(total / per) };
+      }
+
+      const rows = await d1Rows(sql, params);
+      const items = rows.map(adminMode ? mapRow : mapListRow);
+      return res.json(pageInfo ? { items, total, ...pageInfo } : { items, total });
     } catch (err) {
       console.error("Portfolio GET error:", err);
       return res.status(500).json({ error: err.message });
