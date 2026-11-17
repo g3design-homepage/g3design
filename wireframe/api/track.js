@@ -9,6 +9,49 @@ function hashIP(ip) {
     .slice(0, 16);
 }
 
+// 위치는 Vercel 이 함수 요청에 붙이는 지역 헤더로 정한다(외부 호출 없음).
+// 지역 값은 관리자 통계(api/analytics.js)가 읽는 ip-api 형식 영문 이름으로 맞춘다.
+// 시도 코드: ISO 3166-2:KR. 구 단위(district)는 헤더에 없어 비워 둔다.
+const KR_REGION = {
+  11: "Seoul",
+  26: "Busan",
+  27: "Daegu",
+  28: "Incheon",
+  29: "Gwangju",
+  30: "Daejeon",
+  31: "Ulsan",
+  41: "Gyeonggi-do",
+  42: "Gangwon-do",
+  43: "Chungcheongbuk-do",
+  44: "Chungcheongnam-do",
+  45: "Jeollabuk-do",
+  46: "Jeollanam-do",
+  47: "Gyeongsangbuk-do",
+  48: "Gyeongsangnam-do",
+  49: "Jeju-do",
+  50: "Sejong",
+};
+const countryName = new Intl.DisplayNames(["en"], { type: "region" });
+
+function geoFromHeaders(h) {
+  const country = h["x-vercel-ip-country"] || "";
+  let rawCity = "";
+  try {
+    rawCity = decodeURIComponent(h["x-vercel-ip-city"] || "");
+  } catch {}
+  let rawRegion = "";
+  if (country === "KR")
+    rawRegion = KR_REGION[h["x-vercel-ip-country-region"]] || "";
+  else if (country) {
+    try {
+      rawRegion = countryName.of(country) || country;
+    } catch {
+      rawRegion = country;
+    }
+  }
+  return { rawCity, rawDistrict: "", rawRegion };
+}
+
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -23,14 +66,8 @@ module.exports = async (req, res) => {
       req.socket?.remoteAddress ||
       "";
     const ipHash = hashIP(ip);
-    const {
-      city: rawCity,
-      district: rawDistrict,
-      region: rawRegion,
-      page,
-      device,
-      referrer,
-    } = req.body || {};
+    const { page, device, referrer } = req.body || {};
+    const { rawCity, rawDistrict, rawRegion } = geoFromHeaders(req.headers);
 
     // 영문 → 한글 변환
     const cityKo = {
